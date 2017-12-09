@@ -36,11 +36,13 @@
 ehthumbs.db
 Thumbs.db
 
-# Other files #
+# Other files and directories #
 ######################
 *.index
 *.vectors
 *.token
 *.model
-
-
+.classpath
+.project
+.settings/
+target/
