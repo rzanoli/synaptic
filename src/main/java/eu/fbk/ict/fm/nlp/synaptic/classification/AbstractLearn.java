@@ -1,4 +1,4 @@
-package eu.fbk.ict.fm.nlp.classification;
+package eu.fbk.ict.fm.nlp.synaptic.classification;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

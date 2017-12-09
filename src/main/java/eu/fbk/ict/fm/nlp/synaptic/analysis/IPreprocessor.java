@@ -1,4 +1,4 @@
-package eu.fbk.ict.fm.nlp.analysis;
+package eu.fbk.ict.fm.nlp.synaptic.analysis;
 
 /**
  * IProcessor is the interface of the class Processor for pre-processing input data (e.g., tokenization, lemmatization).

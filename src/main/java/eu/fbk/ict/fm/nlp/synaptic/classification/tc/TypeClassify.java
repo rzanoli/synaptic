@@ -1,4 +1,4 @@
-package eu.fbk.ict.fm.nlp.classification.tc;
+package eu.fbk.ict.fm.nlp.synaptic.classification.tc;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -8,9 +8,9 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import eu.fbk.ict.fm.nlp.analysis.FeatureExtractorClassify;
-import eu.fbk.ict.fm.nlp.analysis.Preprocessor;
-import eu.fbk.ict.fm.nlp.classification.AbstractClassify;
+import eu.fbk.ict.fm.nlp.synaptic.analysis.FeatureExtractorClassify;
+import eu.fbk.ict.fm.nlp.synaptic.analysis.Preprocessor;
+import eu.fbk.ict.fm.nlp.synaptic.classification.AbstractClassify;
 import libsvm.svm;
 
 

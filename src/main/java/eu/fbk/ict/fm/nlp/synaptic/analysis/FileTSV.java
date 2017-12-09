@@ -1,4 +1,4 @@
-package eu.fbk.ict.fm.nlp.analysis;
+package eu.fbk.ict.fm.nlp.synaptic.analysis;
 
 /**
  * This class represents the structure (fields names and their position in the tsv file) of the dataset that is

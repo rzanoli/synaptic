@@ -1,4 +1,4 @@
-package eu.fbk.ict.fm.nlp.analysis;
+package eu.fbk.ict.fm.nlp.synaptic.analysis;
 
 import java.util.logging.Logger;
 

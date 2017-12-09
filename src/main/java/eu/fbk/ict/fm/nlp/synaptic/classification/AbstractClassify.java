@@ -1,4 +1,4 @@
-package eu.fbk.ict.fm.nlp.classification;
+package eu.fbk.ict.fm.nlp.synaptic.classification;
 
 import libsvm.svm;
 import libsvm.svm_model;
@@ -18,11 +18,11 @@ public abstract class AbstractClassify implements IClassify {
 	 */
 	public double[] classify(String[] example) {
 
-		int svm_type = svm.svm_get_svm_type(model);
+		//int svm_type = svm.svm_get_svm_type(model);
 	    int nr_class = svm.svm_get_nr_class(model);
 	    int[] labels = new int[nr_class];
 	    svm.svm_get_labels(model, labels);
-	    boolean support_probabilities = svm.svm_check_probability_model(model) == 1;
+	    //boolean support_probabilities = svm.svm_check_probability_model(model) == 1;
 	    double[] scores = new double[2];
 		
 		// read the features vector in input

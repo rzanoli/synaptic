@@ -1,4 +1,4 @@
-package eu.fbk.ict.fm.nlp.classification;
+package eu.fbk.ict.fm.nlp.synaptic.classification;
 
 public interface ILearn {
 

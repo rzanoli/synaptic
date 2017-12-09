@@ -1,4 +1,4 @@
-package eu.fbk.ict.fm.nlp.classification.tc;
+package eu.fbk.ict.fm.nlp.synaptic.classification.tc;
 
 //import java.util.logging.Logger;
 
@@ -10,10 +10,10 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import eu.fbk.ict.fm.nlp.analysis.FeatureExtractorLearn;
-import eu.fbk.ict.fm.nlp.analysis.FileTSV;
-import eu.fbk.ict.fm.nlp.analysis.Preprocessor;
-import eu.fbk.ict.fm.nlp.classification.AbstractLearn;
+import eu.fbk.ict.fm.nlp.synaptic.analysis.FeatureExtractorLearn;
+import eu.fbk.ict.fm.nlp.synaptic.analysis.FileTSV;
+import eu.fbk.ict.fm.nlp.synaptic.analysis.Preprocessor;
+import eu.fbk.ict.fm.nlp.synaptic.classification.AbstractLearn;
 
 public class TypeLearn extends AbstractLearn {
 
