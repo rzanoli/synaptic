@@ -103,10 +103,15 @@ import java.io.InputStreamReader;
 import eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentClassify;
 import eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentLearn;
 
+/**
+* This class shows an example on how the SYNAPTIC API can be used for training the semantic classifier on
+* a given dataset and then using the produced classifier for classifying the same dataset.
+*
+*/
 public class LearnClassifyTest {
 
-	static String dataSet = "/Users/zanoli/Projects/git-repositories/synaptic-git/supersede-german-trainingset_iesa_userfeedback_from_ticket_system_2016.tsv";
-	static String model = "/tmp/supersede-german.sa.model";
+	static String dataSet = "dataset.tsv"; // your dataset 
+	static String model = "/tmp/dataset.sa.model";
 
 	public static void Learn() throws Exception {
 
@@ -138,7 +143,7 @@ public class LearnClassifyTest {
 					correctPredictions++;
 				examples++;
 			}
-			System.out.println(correctPredictions/examples);
+			System.out.println("accuracy:" + correctPredictions/examples);
 			
 		} catch (Exception ex) {
 			throw(ex);
