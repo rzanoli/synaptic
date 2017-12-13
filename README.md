@@ -18,17 +18,17 @@ We provide 2 different distributions namely Jar Distribution and Java Distributi
 
 #### Jar Distribution (CLI)
 
-SYNAPTIC is distributed as a jar file containing all the Java code for training and testing. It can be download from its gihub repository https://github.com/rzanoli/synaptic/........ 
+SYNAPTIC is distributed as a jar file containing all the Java code for training and testing. It can be download from its gihub repository: https://github.com/rzanoli/synaptic/........ 
 
 #### Java Distribution (API)
 
 SYNAPTIC is a Maven project that you can download from its gihub repository by running the following command:
-git clone https://github.com/rzanoli/...............
+```git clone https://github.com/rzanoli/...............```
 
 
 ## CLI Instructions
 
-After getting the Jar Distribution as explained above, you are ready for training the classifer and annotating new datasets. These instructions are valid for both the 'sentiment' classifier and the 'type' classifier. In the rest of this section we will report instructions only for the 'sentiment' classifier but they remain also valid for the other classifier; it is sufficient to change the package name from 'sa' to 'tc' and the classifier name prefix from 'Sentiment' to 'Type' (i.e.,
+After getting the Jar Distribution as explained above, you are ready for training the classifer and annotating new datasets. These instructions are valid for both the 'sentiment' classifier and 'type' classifier. In the rest of this section we will report instructions only for the 'sentiment' classifier but they remain also valid for the other one; in this case it is sufficient to change the package name from 'sa' to 'tc' and the classifier name prefix from 'Sentiment' to 'Type' (i.e.,
 sa.SentimentLearn --> tc.TypeLearn, sa.SentimentClassify --> tc.TypeClassify).
 
 ### Training
@@ -36,18 +36,18 @@ sa.SentimentLearn --> tc.TypeLearn, sa.SentimentClassify --> tc.TypeClassify).
 ```java -cp ....jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentLearn -f datasetFileName -m modelFileName```
 
 Where:
-	datasetFileName is the name of the file containing the training dataset for training the classifier 
- 	modelFileName is the model to generate
+- datasetFileName is the name of the file containing the training dataset for training the classifier 
+- modelFileName is the model to generate
 
 Produced files:
  	
-modelFileName.sa.model			the generated model
-modelFileName.sa.model.features.index	the features index
-modelFileName.sa.model.labels.index	the labels index
-datasetFileName.sa.token		the pre-processed dataset in input
-datasetFileName.sa.token.vectors	the features vectors of the dataset in input
+- modelFileName.sa.model		the generated model
+- modelFileName.sa.model.features.index	the features index
+- modelFileName.sa.model.labels.index	the labels index
+- datasetFileName.sa.token		the pre-processed dataset in input
+- datasetFileName.sa.token.vectors	the features vectors of the dataset in input
 
-the model files with prefix modelFileName will be used in the next phase of annotating new datasets while the files with prefix datasetFileName are produced for debugging purposes only.
+the model files with prefix 'modelFileName' will be used in the next phase of annotating new datasets while the files with prefix 'datasetFileName' are produced for debugging purposes only.
 
 
 ### Classifying
@@ -55,8 +55,8 @@ the model files with prefix modelFileName will be used in the next phase of anno
 ```java -cp ....jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentClassifier -c content -m modelFileName```
 
 Where: 
-	content is the text string to classify 
-	modelFileName is the model generated during the classifier training phase
+- content is the text string to classify 
+- modelFileName is the model generated during the classifier training phase
 
 
 ## API Instructions
@@ -79,8 +79,8 @@ sentimentLearn.run(datasetFileName, modelFileName);
 ```
 
 Where: 
-	datasetFileName is the training dataset for training the classifier 
-	modelFileName is the model generated during the classifier training phase
+- datasetFileName is the training dataset for training the classifier 
+- modelFileName is the model generated during the classifier training phase
 
 ### Classifying
 
@@ -104,15 +104,19 @@ import eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentClassify;
 import eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentLearn;
 
 /**
+*
 * This class shows an example on how the SYNAPTIC API can be used for training the semantic classifier on
-* a given dataset and then using the produced classifier for classifying the same dataset.
+* a given dataset and then use the produced classifier for classifying the same dataset.
 *
 */
-public class LearnClassifyTest {
+public class LearnAndClassifyTest {
 
-	static String dataSet = "dataset.tsv"; // your dataset 
-	static String model = "/tmp/dataset.sa.model";
+	private static String dataSet = "dataset.tsv"; // your dataset 
+	private static String model = "/tmp/dataset.sa.model";
 
+        /**
+	* Trains the classifier
+	*/
 	public static void Learn() throws Exception {
 
 		SentimentLearn semanticLearn = new SentimentLearn();
@@ -120,6 +124,9 @@ public class LearnClassifyTest {
 
 	}
 
+        /**
+	* Classifies by using the generated model
+	*/
 	public static void Classify() throws Exception {
 
 		BufferedReader in = null;
@@ -133,11 +140,11 @@ public class LearnClassifyTest {
 			double correctPredictions = 0;
 			while ((str = in.readLine()) != null) {
 				String[] splitLine = str.split("\t");
-				String content = splitLine[4];
-				String goldLabel = splitLine[2]; //sentiment
+				String content = splitLine[4]; 
+				String goldLabel = splitLine[2]; //sentiment label
 				String[] annotation = semanticClassify.run(content);
-				String label = annotation[0];
-				String score = annotation[1];
+				String label = annotation[0]; //predicted label
+				String score = annotation[1]; //and its score
 				System.out.println("predicted label:" + label + " score:" + score);
 				if (goldLabel.equals(label))
 					correctPredictions++;
