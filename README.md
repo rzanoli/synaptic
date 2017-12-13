@@ -23,7 +23,7 @@ SYNAPTIC is distributed as a jar file containing all the Java code for training 
 #### Java Distribution (API)
 
 SYNAPTIC is a Maven project that you can download from its gihub repository by running the following command:
-```git clone https://github.com/rzanoli/...............```
+```> git clone https://github.com/rzanoli/...............```
 
 
 ## CLI Instructions
@@ -33,7 +33,7 @@ sa.SentimentLearn --> tc.TypeLearn, sa.SentimentClassify --> tc.TypeClassify).
 
 ### Training
 
-```java -cp ....jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentLearn -f datasetFileName -m modelFileName```
+```> java -cp ....jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentLearn -f datasetFileName -m modelFileName```
 
 Where:
 - datasetFileName is the name of the file containing the training dataset for training the classifier 
@@ -52,7 +52,7 @@ the model files with prefix 'modelFileName' will be used in the next phase of an
 
 ### Classifying
 
-```java -cp ....jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentClassifier -c content -m modelFileName```
+```> java -cp ....jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentClassifier -c content -m modelFileName```
 
 Where: 
 - content is the text string to classify 
