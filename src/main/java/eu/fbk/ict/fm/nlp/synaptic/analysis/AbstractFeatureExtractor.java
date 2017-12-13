@@ -9,27 +9,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-
 public class AbstractFeatureExtractor {
-	
-	// the features index containing the mapping between the produced features and their numeric IDs used by the classifiers
-	// this index is produced during the classifier training phase and then used during the classifier test phase
+
+	// The features index containing the mapping between the produced features
+	// and their numeric IDs used by the classifiers.
+	// This index is produced during the classifier training phase and then used
+	// during the classifier test phase.
 	protected HashMap<String, Integer> featuresIndex;
-	// it is used to create a mapping between the labels of the annotated data set and their numeric IDs used by the classifiers
-	// this index is produced during the classifier training phase and then used during the classifier test phase
+	// It is used to create a mapping between the labels of the annotated data
+	// set and their numeric IDs used by the classifiers.
+	// This index is produced during the classifier training phase and then used
+	// during the classifier test phase.
 	protected HashMap<String, Integer> labelsIndex;
-	// the labels index containing the mapping between the labels of the annotated dataset and their numeric IDs used 
-	// to by the classifiers to change from their numeric predictions to the corresponding labels.
+	// The labels index containing the mapping between the labels of the
+	// annotated dataset and their numeric IDs used.
+	// It is used by the classifiers to change from their numeric predictions to the
+	// corresponding labels.
 	protected HashMap<Double, String> inverseLabelsIndex;
-	// the list of stop words that have to be removed from the pre-processed text in input
+	// The list of stop words that have to be removed from the pre-processed
+	// text in input.
 	protected Set<String> stopWords;
-	// enable stop words removal
+	// Enable stop words removal.
 	protected boolean enableStopWordsRemoval;
 
 	/**
-	 * Generates the n-grams (i.e., bigrams) of the given input tokens 
+	 * Generates the n-grams (i.e., bigrams) of the given tokens in input
 	 * 
-	 * @param tokens the tokens
+	 * @param tokens
+	 *            the tokens
 	 * @return the generated n-grams
 	 * @throws Exception
 	 */
@@ -49,11 +56,12 @@ public class AbstractFeatureExtractor {
 		return result;
 
 	}
-	
+
 	/**
-	 * Removes the stop words from the input tokens
+	 * Removes the stop words from the tokens in input
 	 * 
-	 * @param tokens the input tokens
+	 * @param tokens
+	 *            the input tokens
 	 * @return the tokens in input with the stop words removed
 	 * 
 	 * @throws Exception
@@ -66,15 +74,16 @@ public class AbstractFeatureExtractor {
 				tmpList.add(tokens[i]);
 
 		String[] result = tmpList.toArray(new String[tmpList.size()]);
-		
+
 		return result;
 
 	}
-	
+
 	/**
-	 * Normalizes the input tokens to lower case 
+	 * Normalizes the tokens in input to lower case
 	 * 
-	 * @param tokens the input tokens
+	 * @param tokens
+	 *            the input tokens
 	 * @return the normalized tokens
 	 * 
 	 * @throws Exception
@@ -82,15 +91,14 @@ public class AbstractFeatureExtractor {
 	public String[] normalizeToLowerCase(String[] tokens) throws Exception {
 
 		String[] result = new String[tokens.length];
-		
+
 		for (int i = 0; i < tokens.length; i++)
 			result[i] = tokens[i].toLowerCase();
-		
+
 		return result;
 
 	}
 
-	
 	/**
 	 * Loads the stop words
 	 * 
@@ -100,7 +108,7 @@ public class AbstractFeatureExtractor {
 
 		// Get model from resources folder
 		ClassLoader classLoader = getClass().getClassLoader();
-		
+
 		BufferedReader buffer = null;
 
 		try {
@@ -119,25 +127,24 @@ public class AbstractFeatureExtractor {
 			if (buffer != null)
 				buffer.close();
 		}
-		
+
 	}
-	
+
 	/**
 	 * Gets the label string given its numeric id
 	 * 
-	 * @param the label id
+	 * @param the
+	 *            label id
 	 * 
 	 * @return the label string
 	 * 
 	 */
 	public String getLabel(double labelId) {
-		
+
 		String label = this.inverseLabelsIndex.get(labelId);
-		
+
 		return label;
-		
+
 	}
-	
-	
 
 }

@@ -1,4 +1,4 @@
-package eu.fbk.ict.fm.nlp.synaptic.classification.tc;
+package eu.fbk.ict.fm.nlp.synaptic.classification.sa;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -19,18 +19,18 @@ import eu.fbk.ict.fm.nlp.synaptic.classification.AbstractClassify;
 import libsvm.svm;
 
 /**
- * TypeClassify is the class that implements the classifier for annotating an
- * example in input with its 'type' category The classifier can be used from
- * Command Line Interface or its API by calling the method 'run', e.g.,
+ * SentimentClassify is the class that implements the classifier for annotating
+ * an example in input with its 'sentiment' category. The classifier can be used
+ * from Command Line Interface or its API by calling the method 'run', e.g.,
  * 
  * CLI:
  * 
- * 		java TypeClassifier -c content -m modelFileName
+ * 		java SentimentClassifier -c content -m modelFileName
  * 
  * API: 
  * 
- * 		TypeClassify typeClassify = new TypeClassify(modelFileName); 
- * 		String[] annotation = typeClassify.run(content); 
+ * 		SentimentClassify sentimentClassify = new SentimentClassify(modelFileName);
+ * 		String[] annotation = sentimentClassify.run(content); 
  * 		String label = annotation[0]; // the predicted label
  * 		String score = annotation[1]; // and its score
  * 		System.out.println("predicted label:" + label + " score:" + score);
@@ -47,13 +47,13 @@ import libsvm.svm;
  * @since December 2017
  *
  */
-public class TypeClassify extends AbstractClassify {
+public class SentimentClassify extends AbstractClassify {
 
 	// the logger
-	private static final Logger LOGGER = Logger.getLogger(TypeClassify.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(SentimentClassify.class.getName());
 
 	// enable stop words removal
-	private static boolean enableStopWordsRemoval = false;
+	private static boolean enableStopWordsRemoval = true;
 
 	// the preprocessor for pre-processing data
 	private Preprocessor preprocessor;
@@ -62,15 +62,14 @@ public class TypeClassify extends AbstractClassify {
 
 	/**
 	 * Class constructor; it uses the model generated during the classifier
-	 * training phase and the two other files (modelFileName.features.index,
-	 * modelFileName.labels.index) always produced by the classifier while
-	 * training to initializes the classifier itself as well as the pipeline for
-	 * pre-processing data to be annotated.
+	 * training phase and the 2 other files (modelFileName.features.index,
+	 * modelFileName.labels.index) always produced during the training phase to
+	 * prepare the classifier for annotating new examples to be annotated.
 	 * 
 	 * @param modelFileName
 	 *            the model to use for classifying data
 	 */
-	public TypeClassify(String modelFileName) throws Exception {
+	public SentimentClassify(String modelFileName) throws Exception {
 
 		// load the model generated during the classifier training phase
 		model = svm.svm_load_model(modelFileName);
@@ -91,7 +90,7 @@ public class TypeClassify extends AbstractClassify {
 	 * Classifiers the given text; it returns the predicted label and its score
 	 * 
 	 * @param text
-	 *            the content text to classify
+	 *            the text to classify
 	 * 
 	 * @return the label assigned to the given text and its score value
 	 * 
@@ -106,8 +105,10 @@ public class TypeClassify extends AbstractClassify {
 
 			// pre-process the text
 			String[] preprocessedContent = preprocessor.process(text);
+
 			// extract the features vector
 			String[] featuresVector = featureExtractor.extract(preprocessedContent);
+
 			// classify
 			double[] prediction = classify(featuresVector);
 			// get the predicted label
@@ -119,7 +120,7 @@ public class TypeClassify extends AbstractClassify {
 			result[1] = score;
 
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			throw (ex);
 		}
 
 		return result;
@@ -129,7 +130,7 @@ public class TypeClassify extends AbstractClassify {
 	/**
 	 * The classifier entry point
 	 * 
-	 * Usage: java TypeClassifier -c content -m model
+	 * Usage: java SentimentClassifier -c content -m model
 	 * 
 	 * WHERE: content is the text to classify model is the model generated
 	 * during the classifier training phase
@@ -140,12 +141,13 @@ public class TypeClassify extends AbstractClassify {
 		// create Options object
 		Options options = new Options();
 
-		// add data set option
+		// the content to classify
 		Option content = new Option("c", "content", true, "content to classify");
 		content.setRequired(true);
 		options.addOption(content);
 
-		// add model set option
+		// the model generated during the classifier training phase and that has
+		// to be used for annotating the given content
 		Option model = new Option("m", "model", true, "generated model");
 		model.setRequired(true);
 		options.addOption(model);
@@ -162,14 +164,11 @@ public class TypeClassify extends AbstractClassify {
 			// parse the command line arguments
 			CommandLine cmd = parser.parse(options, args);
 
-			// the text to classify
 			String text = cmd.getOptionValue("content");
-			// the model to use for classifying
 			String modelFileName = cmd.getOptionValue("model");
-			// create an instance of the classifier
-			TypeClassify typeClassify = new TypeClassify(modelFileName);
-			// run the classifier
-			String[] result = typeClassify.run(text);
+
+			SentimentClassify sentimentClassify = new SentimentClassify(modelFileName);
+			String[] result = sentimentClassify.run(text);
 			String label = result[0];
 			String score = result[1];
 
@@ -177,7 +176,7 @@ public class TypeClassify extends AbstractClassify {
 
 		} catch (ParseException e) {
 
-			formatter.printHelp(pw, 80, "", "TypeClassify", options, formatter.getLeftPadding(),
+			formatter.printHelp(pw, 80, "", "SentimentClassify", options, formatter.getLeftPadding(),
 					formatter.getDescPadding(), "");
 			pw.flush();
 			LOGGER.log(Level.WARNING, out.toString());

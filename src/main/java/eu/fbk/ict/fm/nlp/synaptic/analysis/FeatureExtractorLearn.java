@@ -8,14 +8,21 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * FeatureExtractorLearn is used during the classifier training phase to extract some features (e.g., n-grams) from the pre-processed training dataset. Tha dataset
- * has been already pre-processed by the Preprocessor @see eu.fbk.ict.fm.nlp.analysisPreprocessor. The output is a file
- * containing the features index, a file with the labels index and the file containing the features vectors of the given dataset.
+ * FeatureExtractorLearn is used during the classifier learning phase to produce
+ * the features vectors of the examples in input and that have already been
+ * pre-processed by the Preprocessor component @see
+ * eu.fbk.ict.fm.nlp.analysisPreprocessor. The output is a file containing the
+ * generated features index, a file with the labels index and the file
+ * containing the features vectors of the given examples of the dataset.
  * 
  * @author zanoli
+ * 
+ * @since December 2017
+ * 
  */
 public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 
@@ -23,10 +30,11 @@ public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 	private static final Logger LOGGER = Logger.getLogger(FeatureExtractorLearn.class.getName());
 
 	/**
-	 * Class constructor that initialized some data structures, and loads the stop words
+	 * Class constructor that initialized some data structures, and loads the
+	 * stop words
 	 */
 	public FeatureExtractorLearn(boolean enableStopWordsRemoval) throws Exception {
-		
+
 		this.featuresIndex = new HashMap<String, Integer>();
 		this.labelsIndex = new HashMap<String, Integer>();
 		this.inverseLabelsIndex = new HashMap<Double, String>();
@@ -39,22 +47,26 @@ public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 	}
 
 	/**
-	 * Extracts some features from the given dataset in input and produces the features vectors. Other files
-	 * produced are the one of the features index and the one of the labels index. 
+	 * Extracts the features vectors of the given dataset in input and saves
+	 * them into a file. Other files produced are the file of the features index
+	 * and the file of the labels index.
 	 * 
-	 * @param datasetFileName the pre-processed dataset in input
-	 * @param featuresVectorFileName the file of the features vectors
-	 * @param featuresIndexFileName the file of the features index
-	 * @param labelsIndexFileName the file of the labels index
-	 * @param datasetLabelIndex the label field position, in the input dataset containing the label (i.e, semantic|type)
+	 * @param datasetFileName
+	 *            the input file containing the pre-processed dataset
+	 * @param featuresVectorFileName
+	 *            the output file of the features vectors
+	 * @param featuresIndexFileName
+	 *            the output file of the features index
+	 * @param labelsIndexFileName
+	 *            the output file of the labels index
+	 * @param datasetLabelIndex
+	 *            the label field position in the input dataset corresponding to
+	 *            the gold label to learn (e.g., 2 that is sentiment)
 	 * 
 	 * @throws Exception
 	 */
-	public void extract(String datasetFileName, 
-			String featuresVectorFileName, 
-			String featuresIndexFileName, 
-			String labelsIndexFileName, 
-			int datasetLabelIndex) throws Exception {
+	public void extract(String datasetFileName, String featuresVectorFileName, String featuresIndexFileName,
+			String labelsIndexFileName, int datasetLabelIndex) throws Exception {
 
 		LOGGER.info("Extracting features....");
 
@@ -85,23 +97,34 @@ public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 				lineCounter++;
 
 				if (lineCounter == 1) // this line contains the fields names
-										// (e.g., start/end time, semantic)
+										// (e.g., start/end time, sentiment)
 					continue;
 
-				// check if the number of fields of the given file is correct
+				// check if the number of fields of the current example is
+				// correct
 				String[] splitLine = str.split("\t");
 				if (splitLine.length != FileTSV.FIELDS_NUMBER)
-					throw new Exception("Invalid Format Exception");
+					throw new Exception("Error in line " + lineCounter + ": wrong number of fields in the input file!");
 
 				// get the label of the current example
 				String label = splitLine[datasetLabelIndex];
+				// check the current label
+				if (label.indexOf(" ") != -1)
+					throw new Exception("Error in line " + lineCounter + ": labels can not contain space characters!");
+				else if (label.length() == 0)
+					throw new Exception(
+							"Error in line " + lineCounter + ": labels must consist of at least one character!");
+				// build the labels index
 				int index = 0;
 				if (labelsIndex.containsKey(label))
 					index = labelsIndex.get(label);
 				else {
 					index = labelsIndex.size() + 1; // labels start from index 1
 					labelsIndex.put(label, index);
-					outLabelsIndex.write(label + " " + index + "\n"); // update the labels index
+					outLabelsIndex.write(label + " " + index + "\n"); // update
+																		// the
+																		// labels
+																		// index
 				}
 				outFeaturesVector.write(String.valueOf(index)); // print the
 																// label as the
@@ -110,16 +133,16 @@ public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 																// feature
 																// vector
 
-				// get the pre-processed content
-				String[] preprocessedContent = splitLine[FileTSV.CONTENT].split(" ");
-				// token normalization
-				preprocessedContent = normalizeToLowerCase(preprocessedContent);
+				// get the pre-processed text
+				String[] preprocessedText = splitLine[FileTSV.CONTENT].split(" ");
+				// text normalization
+				preprocessedText = normalizeToLowerCase(preprocessedText);
 				// stop words removal
 				if (enableStopWordsRemoval)
-					preprocessedContent = removeStopWords(preprocessedContent);
+					preprocessedText = removeStopWords(preprocessedText);
 
-				// generate the features vector
-				String[] features = generateNGrams(preprocessedContent);
+				// generate the features vector of the current example
+				String[] features = generateNGrams(preprocessedText);
 				for (String feature : features) {
 					int featureIndex = 0;
 					if (featuresIndex.containsKey(feature))
@@ -129,6 +152,7 @@ public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 						featuresIndex.put(feature, featureIndex);
 						outFeaturesIndex.write(feature + " " + featureIndex + "\n");
 					}
+					// write the example
 					outFeaturesVector.write(" " + featureIndex + ":1"); // print
 																		// the
 																		// feature
@@ -149,8 +173,6 @@ public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 			LOGGER.info("done.");
 
 		} catch (Exception ex) {
-			ex.printStackTrace();
-			LOGGER.info(ex.getMessage());
 			throw (ex);
 		} finally {
 			if (in != null)
@@ -167,7 +189,6 @@ public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 
 	}
 
-	
 	public static void main(String args[]) {
 
 		try {
@@ -177,11 +198,11 @@ public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 			String featuresVectors = "src/main/java/dataset.tsv.token.vectors";
 			String featuresIndex = "src/main/java/dataset.tsv.token.features.index";
 			String labelsIndex = "src/main/java/dataset.tsv.token.labels.index";
-			int labelPosition = 2; // semantic
+			int labelPosition = 2; // sentiment
 			featureExtractor.extract(dataSet, featuresVectors, featuresIndex, labelsIndex, labelPosition);
 
 		} catch (Exception ex) {
-			System.err.println(ex.getMessage());
+			LOGGER.log(Level.SEVERE, ex.getMessage());
 		}
 
 	}

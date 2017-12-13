@@ -1,6 +1,5 @@
 package eu.fbk.ict.fm.nlp.synaptic.classification;
 
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -8,14 +7,27 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.junit.Test;
 
 import eu.fbk.ict.fm.nlp.synaptic.analysis.FileTSV;
-import eu.fbk.ict.fm.nlp.synaptic.classification.sa.SemanticClassify;
-import eu.fbk.ict.fm.nlp.synaptic.classification.sa.SemanticLearn;
+import eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentClassify;
+import eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentLearn;
 
-public class SemanticClassifierTest {
+/**
+ * Test the sentiment classifier for training and annotating
+ *
+ * @author zanoli
+ * 
+ * @since December 2017
+ *
+ */
+public class SentimentClassifierTest {
+
+	// the logger
+	private static final Logger LOGGER = Logger.getLogger(SentimentClassifierTest.class.getName());
 
 	@Test
 	public void fullTest() {
@@ -31,11 +43,12 @@ public class SemanticClassifierTest {
 			model.delete();
 
 		try {
-			SemanticLearn semanticLearn = new SemanticLearn();
-			semanticLearn.run(dataSet.getAbsolutePath(), model.getAbsolutePath());
+			// create an instance of the classifier
+			SentimentLearn sentimentLearn = new SentimentLearn();
+			// annotate the dataset
+			sentimentLearn.run(dataSet.getAbsolutePath(), model.getAbsolutePath());
 		} catch (Exception ex) {
-			ex.printStackTrace();
-			System.out.println(ex.getMessage());
+			LOGGER.log(Level.SEVERE, ex.getMessage());
 		}
 
 		assertTrue(model.exists());
@@ -52,15 +65,17 @@ public class SemanticClassifierTest {
 
 		try {
 
-			SemanticClassify semanticClassify = new SemanticClassify(model.getAbsolutePath());
+			// create an instance of the classifier
+			SentimentClassify sentimentClassify = new SentimentClassify(model.getAbsolutePath());
 
+			// the dataset to annotate
 			in = new BufferedReader(new InputStreamReader(new FileInputStream(dataSet), "UTF8"));
 
 			String str;
-			int i = 0;
+			int lineCounter = 0;
 			while ((str = in.readLine()) != null) {
 
-				i++;
+				lineCounter++;
 
 				// check if the number of fields of the given input file is
 				// correct
@@ -68,34 +83,33 @@ public class SemanticClassifierTest {
 				if (splitLine.length != FileTSV.FIELDS_NUMBER)
 					throw new Exception("The input file doesn't have the required number of fields!");
 
-				if (i == 1)
+				if (lineCounter == 1) // the line containing the fields names
 					continue;
 
-				// the sentiment
+				// the gold sentiment label
 				String goldLabel = splitLine[FileTSV.SENTIMENT];
-
-				// the content to tokenize
+				// the content to annotate
 				String content = splitLine[FileTSV.CONTENT];
+				// run the classifier
+				String[] prediction = sentimentClassify.run(content);
+				String predectedLablel = prediction[0]; // the predicted label
+				String score = prediction[1]; // and its score
 
-				String[] prediction = semanticClassify.run(content);
-				String predectedLablel = prediction[0];
-				String score = prediction[1];
-
-				System.out.println("predicted label:" + predectedLablel +
-				"\t" + "gold label:" + goldLabel + "\tscore:" + score);
+				LOGGER.info(
+						"predicted label:" + predectedLablel + "\t" + "gold label:" + goldLabel + "\tscore:" + score);
 
 				assertEquals("goldLabel", "goldLabel");
 
 			}
 
 		} catch (Exception ex) {
-			System.err.println(ex.getMessage());
+			LOGGER.log(Level.SEVERE, ex.getMessage());
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
 				} catch (Exception e) {
-					System.err.println(e.getMessage());
+					LOGGER.log(Level.SEVERE, e.getMessage());
 				}
 			}
 		}

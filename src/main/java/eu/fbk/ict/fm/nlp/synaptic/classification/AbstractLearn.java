@@ -14,11 +14,11 @@ import libsvm.svm_problem;
 
 public abstract class AbstractLearn implements ILearn {
 
-	private svm_parameter param; // set by parse_command_line
+	private svm_parameter param; // classifiers parameters
 	private svm_problem prob; // set by read_problem
 	private svm_model model; // the model to generate
 	private int crossValidation = 0; // to enable cross validation
-	private int nFold;
+	private int nFold; // number of folds to use in cross-validation
 	
 	/**
 	 * Learns a model given the input training dataset.
@@ -29,7 +29,7 @@ public abstract class AbstractLearn implements ILearn {
 	 */
 	public void learn(String inputDataFileName, String modelFileName) throws Exception {
 
-		// set basic classifier parameters
+		// set basic svm classifier parameters
 		param = new svm_parameter();
 		//param.probability = 1;
 		//param.gamma = 0.5;
@@ -38,9 +38,10 @@ public abstract class AbstractLearn implements ILearn {
 		param.svm_type = svm_parameter.C_SVC;
 		param.kernel_type = svm_parameter.LINEAR;
 		param.cache_size = 20000;
-		param.eps = 0.000001;
+		param.eps = 0.001;
+		nFold = 10;
 
-		// load the training dataset
+		// load the training dataset that contains the features vectors
 		loadDataSet(inputDataFileName);
 
 		// cross validation or training the classifier
@@ -48,40 +49,17 @@ public abstract class AbstractLearn implements ILearn {
 			crossValidation();
 		} else {
 			svm.svm_set_print_string_function(new libsvm.svm_print_interface(){
-			    @Override public void print(String s) {} // Disables svm output
+			    @Override public void print(String s) {} // make svm output quiet
 			});
-			model = svm.svm_train(prob, param);
-			svm.svm_save_model(modelFileName, model);
+			model = svm.svm_train(prob, param); //generate the model
+			svm.svm_save_model(modelFileName, model); // save the model
 		}
-	}
-	
-	/**
-	 * Sets the C parameter of svm
-	 * 
-	 * @param c the C parameter
-	 * 
-	 */
-	public void setC(double c) {
-		
-		this.param.C = c;
-		
-	}
-	
-	/**
-	 * Sets the eps svm parameter
-	 * 
-	 * @param eps the eps parameter
-	 */
-	public void setEps(double eps) {
-		
-		this.param.eps = eps;
-		
 	}
 	
 	/**
 	 * Sets if the classifier has to perform cross-validation or training
 	 * 
-	 * @param crossValidation 0 for cross-validation;1 otherwise
+	 * @param crossValidation 1 for cross-validation; 0 otherwise
 	 */
 	public void setCrossValidation(int crossValidation) {
 		
@@ -90,7 +68,8 @@ public abstract class AbstractLearn implements ILearn {
 	}
 
 	/**
-	 * Reads the dataset and put it into svmlight format
+	 * Reads the file containing the features vectors produced by the FeatureExtractorLearn component,
+	 * puts the features and their weights into the svmlib data structure.
 	 * 
 	 * @param inputDataFileName the input dataset
 	 * 
@@ -109,6 +88,8 @@ public abstract class AbstractLearn implements ILearn {
 			if (line == null)
 				break;
 
+			// tokenize the features vector in input and put the features and their weights
+			// into the svmlib data structure
 			StringTokenizer st = new StringTokenizer(line, " \t\n\r\f:");
 
 			vy.addElement(atof(st.nextToken()));

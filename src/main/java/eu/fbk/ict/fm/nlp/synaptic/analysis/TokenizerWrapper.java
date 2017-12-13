@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
@@ -16,15 +18,18 @@ import opennlp.tools.tokenize.TokenizerModel;
 import opennlp.tools.util.InvalidFormatException;
 
 /**
- * TokenizerWrapper implements the interface ITokenizerWrapper and is used to tokenize data input.
+ * TokenizerWrapper implements the interface ITokenizerWrapper for tokenizing data input.
  * 
  * @author zanoli
+ * 
+ * @since December 2017
+ *  
  */
 public class TokenizerWrapper implements ITokenizerWrapper {
 
 	// the logger
-	//private static final Logger LOGGER = Logger.getLogger(TokenizerWrapper.class.getName());
-
+	private static final Logger LOGGER = Logger.getLogger(TokenizerWrapper.class.getName());
+	
 	// the OpenNLP model for tokenization; it is available from the resources
 	// directory
 	private File modelFile;
@@ -87,12 +92,14 @@ public class TokenizerWrapper implements ITokenizerWrapper {
 				String[] splitLine = str.split("\t");
 				
 				//for (String f : splitLine)
-				//	System.out.println(f);;
+				//	System.out.println(f);
 				
+				int lineCounter = 0;
 				if (splitLine.length != FileTSV.FIELDS_NUMBER) {
 					// System.out.println(str);
-					throw new Exception("The input file doesn't have the required number of fields!");
+					throw new Exception("Error in line " + lineCounter + ": wrong number of fields in the input file!");
 				}
+				lineCounter++;
 
 				// the ID
 				String id = splitLine[FileTSV.ID];
@@ -154,7 +161,7 @@ public class TokenizerWrapper implements ITokenizerWrapper {
 
 		try {
 
-			// Tokenize a given string text
+			// Tokenize a given text string
 			//
 			// create an instance of the tokenizer
 			TokenizerWrapper tokenizerWrapper = new TokenizerWrapper();
@@ -162,9 +169,9 @@ public class TokenizerWrapper implements ITokenizerWrapper {
 			tokenizerWrapper.init();
 			// tokenize the text
 			String[] tokenizedText = tokenizerWrapper.tokenize(text);
-			// pront the tokenized tokens
+			// print the tokenized tokens
 			for (String t : tokenizedText)
-				System.out.println(t);
+				LOGGER.info(t);
 			//
 			//
 			// Tokenize a text from file
@@ -174,7 +181,7 @@ public class TokenizerWrapper implements ITokenizerWrapper {
 			tokenizerWrapper.tokenize(fileIn, fileOut);
 
 		} catch (Exception ex) {
-			System.err.println(ex.getMessage());
+			LOGGER.log(Level.SEVERE, ex.getMessage());
 		}
 
 	}

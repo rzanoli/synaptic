@@ -10,27 +10,37 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * FeatureExtractorClassify is used during the classifier annotation phase to extract some features (e.g., n-grams) from a pre-processed example (i.e., array of tokens) to annotate. The example in input
- * has been already pre-processed by the Preprocessor @see eu.fbk.ict.fm.nlp.analysisPreprocessor. The output is an array of features corresponding to the features vector of the given example.
+ * FeatureExtractorClassify is used during the classifier annotation phase to
+ * produce the features vectors of the examples in input and that have already
+ * been pre-processed by the Preprocessor component @see
+ * eu.fbk.ict.fm.nlp.analysisPreprocessor. The output is an array of features
+ * corresponding to the features vector of the given example in input.
  * 
  * @author zanoli
+ * 
+ * @since December 2017
+ * 
  */
 public class FeatureExtractorClassify extends AbstractFeatureExtractor {
 
 	// the logger
-	// private static final Logger LOGGER = Logger.getLogger(FeatureExtractorClassify.class.getName());
+	// private static final Logger LOGGER =
+	// Logger.getLogger(FeatureExtractorClassify.class.getName());
 
 	/**
-	 * Class constructor that initialized some data structures and loads the
-	 * stop words, the features index and the labels index produced during the classifier training phase.
+	 * Class constructor that initializes some data structures and loads the
+	 * stop words, the features index and the labels index produced during the
+	 * classifier training phase.
 	 * 
-	 * @param featuresIndexFileName the file containing the features index
-	 * @param labelsIndexFileName the file containing the labels index
-	 * @param enableStopWordsRemoval true for enabling stop words removal; false otherwise
+	 * @param featuresIndexFileName
+	 *            the file containing the features index
+	 * @param labelsIndexFileName
+	 *            the file containing the labels index
+	 * @param enableStopWordsRemoval
+	 *            true for enabling stop words removal; false otherwise
 	 * 
 	 */
-	public FeatureExtractorClassify(String featuresIndexFileName, 
-			String labelsIndexFileName, 
+	public FeatureExtractorClassify(String featuresIndexFileName, String labelsIndexFileName,
 			boolean enableStopWordsRemoval) throws Exception {
 
 		this.featuresIndex = new HashMap<String, Integer>();
@@ -38,8 +48,8 @@ public class FeatureExtractorClassify extends AbstractFeatureExtractor {
 		this.inverseLabelsIndex = new HashMap<Double, String>();
 		this.enableStopWordsRemoval = enableStopWordsRemoval;
 		this.stopWords = new HashSet<String>();
-		
-		// load the list of stop word that are in the resources directory
+
+		// load the list of stop words that are in the resources directory
 		if (enableStopWordsRemoval)
 			loadStopWords();
 
@@ -52,7 +62,8 @@ public class FeatureExtractorClassify extends AbstractFeatureExtractor {
 	/**
 	 * Extracts the features vector from the given pre-processed text in input
 	 * 
-	 * @param text the pre-processed text
+	 * @param text
+	 *            the pre-processed text
 	 * @return the features vector
 	 * 
 	 * @throws Exception
@@ -61,12 +72,13 @@ public class FeatureExtractorClassify extends AbstractFeatureExtractor {
 
 		List<String> tmpList = new ArrayList<String>();
 
-		// the normalized input text
+		// text normalization
 		String[] normalizedText = normalizeToLowerCase(text);
 		// stop words removal
 		if (enableStopWordsRemoval)
 			normalizedText = removeStopWords(normalizedText);
-        // generate the features vector
+		// generate the features vector; all the produced features have the same
+		// weight equals to 1
 		String[] features = generateNGrams(normalizedText);
 		for (String feature : features) {
 			int featureIndex = 0;
@@ -85,7 +97,8 @@ public class FeatureExtractorClassify extends AbstractFeatureExtractor {
 	/**
 	 * Loads the labels index produced during the classifier training phase
 	 * 
-	 * @param file the labels index file name
+	 * @param file
+	 *            the labels index file name
 	 * 
 	 * @throws Exception
 	 */
@@ -116,7 +129,8 @@ public class FeatureExtractorClassify extends AbstractFeatureExtractor {
 	/**
 	 * Loads the features index produced during the classifier training phase
 	 * 
-	 * @param file the features index file name
+	 * @param file
+	 *            the features index file name
 	 * 
 	 * @throws Exception
 	 */

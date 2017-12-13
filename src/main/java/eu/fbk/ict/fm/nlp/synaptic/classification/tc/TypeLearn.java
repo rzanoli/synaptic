@@ -1,5 +1,10 @@
 package eu.fbk.ict.fm.nlp.synaptic.classification.tc;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 //import java.util.logging.Logger;
 
 import org.apache.commons.cli.BasicParser;
@@ -15,17 +20,51 @@ import eu.fbk.ict.fm.nlp.synaptic.analysis.FileTSV;
 import eu.fbk.ict.fm.nlp.synaptic.analysis.Preprocessor;
 import eu.fbk.ict.fm.nlp.synaptic.classification.AbstractLearn;
 
+/**
+ * TypeLearn is the class that implements the classifier for training a new
+ * model on a given dataset annotated with 'type' label The classifier can be
+ * used from Command Line Interface or its API by calling the method 'run', e.g.,
+ * 
+ * CLI:
+ * 
+ * 		java TypeLearn -f datasetFileName -m modelFileName
+ * 
+ * API: 
+ * 
+ * 		TypeLearn typeLearn = new TypeLearn(); 
+ * 		typeLearn.run(datasetFileName, modelFileName);
+ *
+ *
+ * WHERE: 
+ * 
+ * 		datasetFileName is the name of the file containing the training dataset for training the classifier 
+ * 		modelFileName is the model to generate
+ * 
+ * 
+ * Produced files:
+ * 
+ * 		modelFileName.sa.model					the generated model to use for annotating new examples
+ * 		modelFileName.sa.model.features.index	the features index to use for annotating new examples
+ *      modelFileName.sa.model.labels.index		the labels index to use for annotating new examples
+ * 		datasetFileName.sa.token				the pre-processed dataset in input to use for debugging
+ * 		datasetFileName.sa.token.vectors		the features vectors of the dataset in input to use for debugging
+ * 
+ * 
+ * @author zanoli
+ * 
+ * @since December 2017
+ *
+ */
 public class TypeLearn extends AbstractLearn {
 
 	// the logger
-	// private static final Logger LOGGER =
-	// Logger.getLogger(SemanticLearn.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(TypeLearn.class.getName());
 
-	// enable stop words removal
+	// disable stop words removal
 	private static boolean enableStopWordsRemoval = false;
 	// the preprocessor for pre-processing data
 	private Preprocessor preprocessor;
-	// the feature extractor for extrating the features from the data set
+	// the feature extractor for extrating the features from the dataset
 	private FeatureExtractorLearn featureExtractor;
 
 	/**
@@ -45,7 +84,7 @@ public class TypeLearn extends AbstractLearn {
 	}
 
 	/**
-	 * Trains the classifier on the given data set and produces the model to use
+	 * Trains the classifier on the given dataset and produces the model to use
 	 * in classification
 	 * 
 	 * @param dataSetFileName
@@ -80,6 +119,17 @@ public class TypeLearn extends AbstractLearn {
 
 	}
 
+	/**
+	 * The classifier entry point
+	 * 
+	 * Usage: java TypeLearn -f dataSet -m model
+	 * 
+	 * WHERE:
+	 * 
+	 * dataSet is the name of the file containing the training dataset for
+	 * training the classifier model is the model file name to generate
+	 * 
+	 */
 	public static void main(String[] args) {
 
 		// create Options object
@@ -95,45 +145,38 @@ public class TypeLearn extends AbstractLearn {
 		model.setRequired(true);
 		options.addOption(model);
 
-		// add data set option
-		// Option validation = new Option("v", "cross_validation", false, "perform cross validation");
-		// validation.setRequired(false);
-		// options.addOption(validation);
-
-		// add data set option
-		// Option c = new Option("c", "C", false, "svm parameter: trade-off between training error");
-		// validation.setRequired(false);
-		// options.addOption(c);
-
-		// add data set option
-		// Option eps = new Option("e", "eps", false, "svm parameter: allows that error for termination criterion");
-		// validation.setRequired(false);
-		// options.addOption(eps);
-
 		// create the command line parser
 		CommandLineParser parser = new BasicParser();
+		// the formatter for parse exception
 		HelpFormatter formatter = new HelpFormatter();
+		StringWriter out = new StringWriter();
+		PrintWriter pw = new PrintWriter(out);
 
 		try {
 
 			// parse the command line arguments
 			CommandLine cmd = parser.parse(options, args);
 
+			// the training dataset
 			String dataSetFileName = cmd.getOptionValue("file");
+			// the model to generate
 			String modelFileName = cmd.getOptionValue("model");
 
-			TypeLearn semanticLearn = new TypeLearn();
-			semanticLearn.run(dataSetFileName, modelFileName);
-
-			// src/main/java/dataset_example.tsv
+			// create an instance of the classifier
+			TypeLearn typeLearn = new TypeLearn();
+			// run the classifier
+			typeLearn.run(dataSetFileName, modelFileName);
 
 		} catch (ParseException e) {
 
-			formatter.printHelp("TypeLearn", options);
+			formatter.printHelp(pw, 80, "", "TypeLearn", options, formatter.getLeftPadding(),
+					formatter.getDescPadding(), "");
+			pw.flush();
+			LOGGER.log(Level.WARNING, out.toString());
 
 		} catch (Exception ex) {
 
-			System.err.println(ex.getMessage());
+			LOGGER.log(Level.SEVERE, ex.getMessage());
 
 		}
 

@@ -1,6 +1,9 @@
 package eu.fbk.ict.fm.nlp.synaptic.classification.sa;
 
-//import java.util.logging.Logger;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -15,17 +18,50 @@ import eu.fbk.ict.fm.nlp.synaptic.analysis.FileTSV;
 import eu.fbk.ict.fm.nlp.synaptic.analysis.Preprocessor;
 import eu.fbk.ict.fm.nlp.synaptic.classification.AbstractLearn;
 
-public class SemanticLearn extends AbstractLearn {
+/**
+ * SentimentLearn is the class that implements the classifier for training a new
+ * model on a given dataset annotated with 'sentiment' label. The classifier can
+ * be used from Command Line Interface or its API by calling the method 'run', e.g.,
+ * 
+ * CLI:
+ * 
+ * 		java SentimentLearn -f datasetFileName -m modelFileName
+ * 
+ * API: 
+ * 
+ * 		SentimentLearn sentimentLearn = new SentimentLearn();
+ * 		sentimentLearn.run(datasetFileName, modelFileName);
+ *
+ *
+ * WHERE: 
+ * 		datasetFileName is the name of the file containing the training dataset for training the classifier 
+ * 		modelFileName is the model to generate
+ * 
+ * 
+ * Produced files:
+ * 
+ * 		modelFileName.sa.model					the generated model to use for annotating new examples
+ * 		modelFileName.sa.model.features.index	the features index to use for annotating new examples
+ *      modelFileName.sa.model.labels.index		the labels index to use for annotating new examples
+ * 		datasetFileName.sa.token				the pre-processed dataset in input to use for debugging
+ * 		datasetFileName.sa.token.vectors		the features vectors of the dataset in input to use for debugging
+ * 
+ * 
+ * @author zanoli
+ * 
+ * @since December 2017
+ *
+ */
+public class SentimentLearn extends AbstractLearn {
 
 	// the logger
-	// private static final Logger LOGGER =
-	// Logger.getLogger(SemanticLearn.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(SentimentLearn.class.getName());
 
 	// enable stop words removal
 	private static boolean enableStopWordsRemoval = true;
 	// the preprocessor for pre-processing data
 	private Preprocessor preprocessor;
-	// the feature extractor for extrating the features from the data set
+	// the feature extractor for extrating the features from the dataset
 	private FeatureExtractorLearn featureExtractor;
 
 	/**
@@ -35,7 +71,7 @@ public class SemanticLearn extends AbstractLearn {
 	 * @param modelFileName
 	 *            the model to use for classifying data
 	 */
-	public SemanticLearn() throws Exception {
+	public SentimentLearn() throws Exception {
 
 		// initializes the preprocessor
 		preprocessor = new Preprocessor();
@@ -45,7 +81,7 @@ public class SemanticLearn extends AbstractLearn {
 	}
 
 	/**
-	 * Trains the classifier on the given data set and produces the model to use
+	 * Trains the classifier on the given dataset and produces the model to use
 	 * in classification
 	 * 
 	 * @param dataSetFileName
@@ -80,6 +116,17 @@ public class SemanticLearn extends AbstractLearn {
 
 	}
 
+	/**
+	 * The classifier entry point
+	 * 
+	 * Usage: java SentimentLearn -f dataSet -m model
+	 * 
+	 * WHERE:
+	 * 
+	 * dataSet is the name of the file containing the training dataset for
+	 * training the classifier model is the model file name to generate
+	 * 
+	 */
 	public static void main(String[] args) {
 
 		// create Options object
@@ -95,24 +142,12 @@ public class SemanticLearn extends AbstractLearn {
 		model.setRequired(true);
 		options.addOption(model);
 
-		// add data set option
-		// Option validation = new Option("v", "cross_validation", false, "perform cross validation");
-		// validation.setRequired(false);
-		// options.addOption(validation);
-
-		// add data set option
-		// Option c = new Option("c", "C", false, "svm parameter: trade-off between training error");
-		// validation.setRequired(false);
-		// options.addOption(c);
-
-		// add data set option
-		// Option eps = new Option("e", "eps", false, "svm parameter: allows that error for termination criterion");
-		// validation.setRequired(false);
-		// options.addOption(eps);
-
 		// create the command line parser
 		CommandLineParser parser = new BasicParser();
+		// the formatter for parse exception
 		HelpFormatter formatter = new HelpFormatter();
+		StringWriter out = new StringWriter();
+		PrintWriter pw = new PrintWriter(out);
 
 		try {
 
@@ -122,18 +157,21 @@ public class SemanticLearn extends AbstractLearn {
 			String dataSetFileName = cmd.getOptionValue("file");
 			String modelFileName = cmd.getOptionValue("model");
 
-			SemanticLearn semanticLearn = new SemanticLearn();
-			semanticLearn.run(dataSetFileName, modelFileName);
+			SentimentLearn sentimentLearn = new SentimentLearn();
+			sentimentLearn.setCrossValidation(1);
 
-			// src/main/java/dataset_example.tsv
+			sentimentLearn.run(dataSetFileName, modelFileName);
 
 		} catch (ParseException e) {
 
-			formatter.printHelp("SemanticLearn", options);
+			formatter.printHelp(pw, 80, "", "SentimentLearn", options, formatter.getLeftPadding(),
+					formatter.getDescPadding(), "");
+			pw.flush();
+			LOGGER.log(Level.WARNING, out.toString());
 
 		} catch (Exception ex) {
 
-			System.err.println(ex.getMessage());
+			LOGGER.log(Level.SEVERE, ex.getMessage());
 
 		}
 

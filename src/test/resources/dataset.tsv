@@ -1,1 +1,2 @@
-ID	start/end time	sentiment	type	content1	1234	neutral	bug_report	Laden ist nicht schlecht2	2345	positive	other	Die Schnittstelle befriedigt mich3	2346	negative	other	die Software kompiliert nicht, Ich beantrage eine Rückerstattung4	2345	positive	other	das Werkzeug befriedigt mich
+ID	start/end time	sentiment	type	Content#1	2016	negative	bug_report	Der Kessel funktioniert schlecht; Das Befehlsmodul antwortet nicht
+#2	2015	neutral	other	Dieser Kessel funktioniert gut, aber die Steuerung könnte schneller sein

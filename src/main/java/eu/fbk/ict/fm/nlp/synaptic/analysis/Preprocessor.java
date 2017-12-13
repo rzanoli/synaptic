@@ -1,11 +1,16 @@
 package eu.fbk.ict.fm.nlp.synaptic.analysis;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Preprocessor implements the interface IPreprocessor for pre-processing input data.
+ * Preprocessor implements the interface IPreprocessor for pre-processing input
+ * data.
  * 
  * @author zanoli
+ * 
+ * @since December 2017
+ * 
  */
 public class Preprocessor implements IPreprocessor {
 
@@ -16,7 +21,7 @@ public class Preprocessor implements IPreprocessor {
 	TokenizerWrapper tokenizerWrapper;
 
 	/**
- 	 * Class constructor
+	 * Class constructor
 	 */
 	public Preprocessor() {
 
@@ -59,11 +64,12 @@ public class Preprocessor implements IPreprocessor {
 
 			String fileIn = "src/main/java/dataset.tsv";
 			String fileOut = "src/main/java/dataset.tsv.token";
-			// run the preprocessor on the input file and saves the results into the output file
+			// run the preprocessor on the input file and saves the results into
+			// the output file
 			preprocessor.process(fileIn, fileOut);
 
 		} catch (Exception ex) {
-			System.err.println(ex.getMessage());
+			LOGGER.log(Level.SEVERE, ex.getMessage());
 		}
 
 	}

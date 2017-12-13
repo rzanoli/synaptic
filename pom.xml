@@ -8,10 +8,6 @@
 	<!-- Output to jar format -->
 	<packaging>jar</packaging>
 
-	<properties>
-		<jdk.version>1.8</jdk.version>
-	</properties>
-
 	<dependencies>
 
 		<!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->

@@ -1,14 +1,16 @@
 package eu.fbk.ict.fm.nlp.synaptic.analysis;
 
 /**
- * This class represents the structure (fields names and their position in the tsv file) of the dataset that is
- * used for training the classifiers. 
+ * This class represents the structure (fields names and their position in the
+ * tsv file) of the dataset that is used for training the classifiers.
  * 
  * @author zanoli
+ * 
+ * @since December 2017
  *
  */
 public class FileTSV {
-	
+
 	// the fields index in the tsv input file
 	public static int ID = 0;
 	public static int START_END_TIME = 1;

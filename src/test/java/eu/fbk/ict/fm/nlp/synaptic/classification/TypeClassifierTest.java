@@ -1,6 +1,5 @@
 package eu.fbk.ict.fm.nlp.synaptic.classification;
 
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -8,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.junit.Test;
 
@@ -15,7 +16,18 @@ import eu.fbk.ict.fm.nlp.synaptic.analysis.FileTSV;
 import eu.fbk.ict.fm.nlp.synaptic.classification.tc.TypeClassify;
 import eu.fbk.ict.fm.nlp.synaptic.classification.tc.TypeLearn;
 
+/**
+ * Test the type classifier for training and annotating
+ *
+ * @author zanoli
+ * 
+ * @since December 2017
+ *
+ */
 public class TypeClassifierTest {
+
+	// the logger
+	private static final Logger LOGGER = Logger.getLogger(TypeClassifierTest.class.getName());
 
 	@Test
 	public void fullTest() {
@@ -31,11 +43,12 @@ public class TypeClassifierTest {
 			model.delete();
 
 		try {
+			// create an instance of the classifier
 			TypeLearn typeLearn = new TypeLearn();
+			// train the classifier
 			typeLearn.run(dataSet.getAbsolutePath(), model.getAbsolutePath());
 		} catch (Exception ex) {
-			ex.printStackTrace();
-			System.out.println(ex.getMessage());
+			LOGGER.log(Level.SEVERE, ex.getMessage());
 		}
 
 		assertTrue(model.exists());
@@ -52,8 +65,10 @@ public class TypeClassifierTest {
 
 		try {
 
+			// create an instance of the classifier
 			TypeClassify typeClassify = new TypeClassify(model.getAbsolutePath());
 
+			// input dataset to annotate
 			in = new BufferedReader(new InputStreamReader(new FileInputStream(dataSet), "UTF8"));
 
 			String str;
@@ -71,31 +86,30 @@ public class TypeClassifierTest {
 				if (i == 1)
 					continue;
 
-				// the sentiment
-				String goldLabel = splitLine[FileTSV.TYPE];
-
-				// the content to tokenize
+				// the gold type label
+				String goldLabel = splitLine[FileTSV.TYPE]; //type label
+				// the content to annotate
 				String content = splitLine[FileTSV.CONTENT];
-
+                //run the classifier
 				String[] prediction = typeClassify.run(content);
-				String predectedLablel = prediction[0];
-				String score = prediction[1];
+				String predectedLablel = prediction[0]; // the predicted label
+				String score = prediction[1]; // and its score
 
-				System.out.println("predicted label:" + predectedLablel +
-				 "\t" + "gold label:" + goldLabel + "\tscore:" + score);
+				LOGGER.info(
+						"predicted label:" + predectedLablel + "\t" + "gold label:" + goldLabel + "\tscore:" + score);
 
 				assertEquals("goldLabel", "goldLabel");
 
 			}
 
 		} catch (Exception ex) {
-			System.err.println(ex.getMessage());
+			LOGGER.log(Level.SEVERE, ex.getMessage());
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
 				} catch (Exception e) {
-					System.err.println(e.getMessage());
+					LOGGER.log(Level.SEVERE, e.getMessage());
 				}
 			}
 		}
