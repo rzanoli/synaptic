@@ -1,6 +1,6 @@
 # synaptic
 
-SYNAPTIC library consists of several components for pre-processing data, extracting relevant features and for 'sentiment' and 'type' classification for German. Training and classification operations are accessible via the SYNAPTIC Application Program Interface (API). In addition, a Command Line Interface (CLI) is provided for convenience of experiments and training.
+The SYNAPTIC library consists of several components for pre-processing data (e.g., tokenization), extracting relevant features and for 'sentiment' and 'type' classification for German. Training and classification operations are accessible via the SYNAPTIC Application Program Interface (API). In addition, a Command Line Interface (CLI) is provided for convenience of experiments and training.
 
 ## Getting started
 
@@ -28,7 +28,7 @@ SYNAPTIC is a Maven project that you can download from its gihub repository by r
 
 ## CLI Instructions
 
-After getting the Jar Distribution as explained above, you are ready for training the classifer and annotating new datasets. These instructions are valid for both the 'sentiment' classifier and 'type' classifier. In the rest of this section we will report instructions only for the 'sentiment' classifier but they remain also valid for the other one; in this case it is sufficient to change the package name from 'sa' to 'tc' and the classifier name prefix from 'Sentiment' to 'Type' (i.e.,
+After getting the Jar Distribution as explained above, you are ready for training the classifer and annotating new datasets. These instructions are valid for both the 'sentiment' classifier and 'type' classifier. In the rest of this section we will report instructions only for the 'sentiment' classifier but they remain also valid for the other classifier: it is sufficient to change the package name from 'sa' to 'tc' and the classifier name prefix from 'Sentiment' to 'Type' (i.e.,
 sa.SentimentLearn --> tc.TypeLearn, sa.SentimentClassify --> tc.TypeClassify).
 
 ### Training
@@ -56,12 +56,12 @@ the model files with prefix 'modelFileName' will be used in the next phase of an
 
 Where: 
 - content is the text string to classify 
-- modelFileName is the model generated during the classifier training phase
+- modelFileName is the model generated during the classifier training phase (it consists of all the 3 files generated during the training phase: .model, .model.features.index, .model.labels.index).
 
 
 ## API Instructions
 
-SYNAPTIC is a Maven project and after getting the Java Distribution of the project as explained above, you need to install its maven artifact into your local maven repository (i.e., m2) and then put the following dependency into the project file (i.e., pom.xml) of your project.
+SYNAPTIC has been developed as a Maven project and after getting its Java Distribution as explained above, you first need to install its maven artifact into your local maven repository (i.e., m2), and then put the following dependency into the project file (i.e., pom.xml) of your java project.
 
 ```
 <dependency>
@@ -92,7 +92,7 @@ String score = annotation[1]; // and its score
 System.out.println("predicted label:" + label + " score:" + score);
 ```
 
-### Example of a java project using SYNAPTIC API
+### Example of calling SYNAPTIC API from java code
 
 ```java
 import java.io.BufferedReader;
