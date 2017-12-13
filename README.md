@@ -8,13 +8,13 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-- Java 1.7
+- Java 1.7 or later
 - Apache Maven (http://maven.apache.org) (SYNAPTIC API)
 - git (SYNAPTIC API)
 
 ### How to get the code
 
-We provide 2 different distributions namely Jar Distribution and Java Distribution; the first one can be used for running SYNAPTIC from CLI, while the second distribution can be used when you want to use SYNAPTIC as a library from your java code.
+Two different distributions of SYNAPTIC are provided: Jar Distribution and Java Distribution; the first one can be used for running SYNAPTIC from CLI, while the second distribution can be used when you want to use SYNAPTIC as a library from your java code.
 
 #### Jar Distribution (CLI)
 
