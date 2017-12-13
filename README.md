@@ -33,7 +33,7 @@ sa.SentimentLearn --> tc.TypeLearn, sa.SentimentClassify --> tc.TypeClassify).
 
 ### Training
 
-java -cp ....jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentLearn -f datasetFileName -m modelFileName
+```java -cp ....jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentLearn -f datasetFileName -m modelFileName```
 
 Where:
 	datasetFileName is the name of the file containing the training dataset for training the classifier 
@@ -52,7 +52,7 @@ the model files with prefix modelFileName will be used in the next phase of anno
 
 ### Classifying
 
-java -cp ....jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentClassifier -c content -m modelFileName
+```java -cp ....jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentClassifier -c content -m modelFileName```
 
 Where: 
 	content is the text string to classify 
@@ -63,17 +63,20 @@ Where:
 
 SYNAPTIC is a Maven project and after getting the Java Distribution of the project as explained above, you need to install its maven artifact into your local maven repository (i.e., m2) and then put the following dependency into the project file (i.e., pom.xml) of your project.
 
+```
 <dependency>
 	<groupId>eu.fbk.ict.fm.nlp</groupId>
 	<artifactId>classifier</artifactId>
 	<version>1.0-SNAPSHOT</version>
 </dependency>
-
+```
 
 ### Training
 
+```java
 SentimentLearn sentimentLearn = new SentimentLearn();
 sentimentLearn.run(datasetFileName, modelFileName);
+```
 
 Where: 
 	datasetFileName is the training dataset for training the classifier 
@@ -81,11 +84,13 @@ Where:
 
 ### Classifying
 
+```java
 SentimentClassify sentimentClassify = new SentimentClassify(modelFileName);
 String[] annotation = sentimentClassify.run(content); 
 String label = annotation[0]; // the predicted label
 String score = annotation[1]; // and its score
 System.out.println("predicted label:" + label + " score:" + score);
+```
 
 ### Example of a java project using SYNAPTIC API
 
