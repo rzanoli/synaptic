@@ -9,8 +9,8 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 - Java 1.7 or later
-- Apache Maven (http://maven.apache.org) (SYNAPTIC API)
-- git (SYNAPTIC API)
+- Apache Maven (http://maven.apache.org) (required by SYNAPTIC API)
+- git (required by SYNAPTIC API)
 
 ### How to get the code
 
@@ -34,7 +34,13 @@ Maven project that you can download from gihub by running the following command:
 After getting the Jar Distribution as explained above, you are ready for training the classifer on a dataset and annotating new examples. These instructions are valid for both the 'sentiment' classifier and 'type' classifier. In the rest of this section we will report instructions only for the 'sentiment' classifier but they remain also valid for the other classifier: it is sufficient to change the package name from 'sa' to 'tc' and the classifier name prefix from 'Sentiment' to 'Type' (i.e.,
 sa.SentimentLearn --> tc.TypeLearn, sa.SentimentClassify --> tc.TypeClassify).
 
+### Installation
+
+Save the jar file downloaded into your working directtory.
+
 ### Training
+
+From your working directory, run the following command:
 
 ```> java -cp ....jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentLearn -f datasetFileName -m modelFileName```
 
@@ -55,6 +61,8 @@ the generated files with prefix 'modelFileName' will be used in the next phase f
 
 ### Classifying
 
+From your working directory, run the following command:
+
 ```> java -cp ....jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentClassifier -c content -m modelFileName```
 
 Where: 
@@ -74,7 +82,19 @@ SYNAPTIC has been developed as a Maven project and after getting its java Source
 </dependency>
 ```
 
+### Installation
+
+Copy the project that you have cloned from Github into your working directory, and from that directory, run the following maven command to install the SYNAPTIC artifact into your maven local repository:
+
+```
+> mvn install
+```
+
+The SYNAPTIC API is now avalable in your favourite java IDE (e.g., Eclipse)
+
 ### Training
+
+The following piece of code can be used to train the classifier:
 
 ```java
 try {
@@ -90,6 +110,8 @@ Where:
 - modelFileName is the model generated during the classifier training phase
 
 ### Classifying
+
+The following piece of code can be used to annotate new examples by using the classifier trained in the previous step:
 
 ```java
 try {
