@@ -4,7 +4,7 @@ The SYNAPTIC library consists of several components for pre-processing data (e.g
 
 ## Getting started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+These instructions will get you a copy of the project up and running on your local machine.
 
 ### Prerequisites
 
@@ -14,21 +14,21 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### How to get the code
 
-Two different distributions of SYNAPTIC are provided: Jar Distribution and Java Distribution; the first one can be used for running SYNAPTIC from CLI, while the second distribution can be used when you want to use SYNAPTIC as a library from your java code.
+Two different distributions of SYNAPTIC are provided: Jar Distribution and Java Source Distribution; the first distribution can be used for running SYNAPTIC from CLI, while the second distribution can be used when you want to use SYNAPTIC as a library from your java code.
 
 #### Jar Distribution (CLI)
 
-SYNAPTIC is distributed as a jar file containing all the Java code for training and testing. It can be download from its gihub repository: https://github.com/rzanoli/synaptic/........ 
+jar file containing all the Java code for training and testing. It can be download at this address: https://github.com/rzanoli/synaptic/........ 
 
-#### Java Distribution (API)
+#### Java Source Distribution (API)
 
-SYNAPTIC is a Maven project that you can download from its gihub repository by running the following command:
+Maven project that you can download from gihub by running the following command:
 ```> git clone https://github.com/rzanoli/...............```
 
 
 ## CLI Instructions
 
-After getting the Jar Distribution as explained above, you are ready for training the classifer and annotating new datasets. These instructions are valid for both the 'sentiment' classifier and 'type' classifier. In the rest of this section we will report instructions only for the 'sentiment' classifier but they remain also valid for the other classifier: it is sufficient to change the package name from 'sa' to 'tc' and the classifier name prefix from 'Sentiment' to 'Type' (i.e.,
+After getting the Jar Distribution as explained above, you are ready for training the classifer on a dataset and annotating new examples. These instructions are valid for both the 'sentiment' classifier and 'type' classifier. In the rest of this section we will report instructions only for the 'sentiment' classifier but they remain also valid for the other classifier: it is sufficient to change the package name from 'sa' to 'tc' and the classifier name prefix from 'Sentiment' to 'Type' (i.e.,
 sa.SentimentLearn --> tc.TypeLearn, sa.SentimentClassify --> tc.TypeClassify).
 
 ### Training
@@ -37,17 +37,17 @@ sa.SentimentLearn --> tc.TypeLearn, sa.SentimentClassify --> tc.TypeClassify).
 
 Where:
 - datasetFileName is the name of the file containing the training dataset for training the classifier 
-- modelFileName is the model to generate
+- modelFileName is the file name of the model to generate
 
 Produced files:
  	
-- modelFileName.sa.model		the generated model
-- modelFileName.sa.model.features.index	the features index
-- modelFileName.sa.model.labels.index	the labels index
-- datasetFileName.sa.token		the pre-processed dataset in input
-- datasetFileName.sa.token.vectors	the features vectors of the dataset in input
+- modelFileName				the model
+- modelFileName.features.index		the features index
+- modelFileName.labels.index		the labels index
+- datasetFileName.sa.token		the pre-processed dataset
+- datasetFileName.sa.token.vectors	the features vectors
 
-the model files with prefix 'modelFileName' will be used in the next phase of annotating new datasets while the files with prefix 'datasetFileName' are produced for debugging purposes only.
+the generated files with prefix 'modelFileName' will be used in the next phase for annotating new examples while the files with prefix 'datasetFileName' are produced for training the classifier and the saved for debugging purposes only.
 
 
 ### Classifying
@@ -56,12 +56,12 @@ the model files with prefix 'modelFileName' will be used in the next phase of an
 
 Where: 
 - content is the text string to classify 
-- modelFileName is the model generated during the classifier training phase (it consists of all the 3 files generated during the training phase: .model, .model.features.index, .model.labels.index).
+- modelFileName is the model generated during the classifier training phase (it consists of all the 3 files generated during the training phase: modelFileName, modelFileName.features.index, modelFileName.labels.index that have to stay in the same directory).
 
 
 ## API Instructions
 
-SYNAPTIC has been developed as a Maven project and after getting its Java Distribution as explained above, you first need to install its maven artifact into your local maven repository (i.e., m2), and then put the following dependency into the project file (i.e., pom.xml) of your java project.
+SYNAPTIC has been developed as a Maven project and after getting its java Source Distribution as explained above, you first need to install its maven artifact into your local maven repository (i.e., m2), and then put the following dependency into the project file (i.e., pom.xml) of your java project.
 
 ```
 <dependency>
@@ -74,8 +74,12 @@ SYNAPTIC has been developed as a Maven project and after getting its Java Distri
 ### Training
 
 ```java
-SentimentLearn sentimentLearn = new SentimentLearn();
-sentimentLearn.run(datasetFileName, modelFileName);
+try {
+    SentimentLearn sentimentLearn = new SentimentLearn();
+    sentimentLearn.run(datasetFileName, modelFileName);
+} catch (Exception ex) {
+    System.err.println(ex.getMessage());
+}
 ```
 
 Where: 
@@ -85,11 +89,15 @@ Where:
 ### Classifying
 
 ```java
-SentimentClassify sentimentClassify = new SentimentClassify(modelFileName);
-String[] annotation = sentimentClassify.run(content); 
-String label = annotation[0]; // the predicted label
-String score = annotation[1]; // and its score
-System.out.println("predicted label:" + label + " score:" + score);
+try {
+    SentimentClassify sentimentClassify = new SentimentClassify(modelFileName);
+    String[] annotation = sentimentClassify.run(content); 
+    String label = annotation[0]; // the predicted label
+    String score = annotation[1]; // and its score
+    System.out.println("predicted label:" + label + " score:" + score);
+} catch (Exception ex) {
+      System.err.println(ex.getMessage());
+}
 ```
 
 ### Example of calling SYNAPTIC API from java code
