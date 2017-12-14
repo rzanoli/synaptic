@@ -31,12 +31,12 @@ Maven project that you can download from gihub by running the following command:
 
 ## CLI Instructions
 
-After getting the Jar Distribution as explained above, you are ready for training the classifer on a dataset and annotating new examples. These instructions are valid for both the 'sentiment' classifier and 'type' classifier. In the rest of this section we will report instructions only for the 'sentiment' classifier but they remain also valid for the other classifier: it is sufficient to change the package name from 'sa' to 'tc' and the classifier name prefix from 'Sentiment' to 'Type' (i.e.,
+After getting the Jar Distribution as explained above, you are ready for training the classifier on a dataset and annotating new examples. These instructions are valid for both the 'sentiment' classifier and 'type' classifier. In the rest of this section we will report instructions only for the 'sentiment' classifier but they remain also valid for the other classifier: it is sufficient to change the package name from 'sa' to 'tc' and the classifier name prefix from 'Sentiment' to 'Type' (i.e.,
 sa.SentimentLearn --> tc.TypeLearn, sa.SentimentClassify --> tc.TypeClassify).
 
 ### Installation
 
-Save the jar file downloaded into your working directtory.
+Save the jar file downloaded into your working directory.
 
 ### Training
 
@@ -84,13 +84,13 @@ SYNAPTIC has been developed as a Maven project and after getting its java Source
 
 ### Installation
 
-Copy the project that you have cloned from Github into your working directory, and from that directory, run the following maven command to install the SYNAPTIC artifact into your maven local repository:
+Copy the project that you have cloned from github into your working directory, and from that directory, run the following maven command to install the SYNAPTIC artifact into your maven local repository:
 
 ```
 > mvn install
 ```
 
-The SYNAPTIC API is now avalable in your favourite java IDE (e.g., Eclipse)
+The SYNAPTIC API is now available in your favourite java IDE (e.g., Eclipse)
 
 ### Training
 
