@@ -18,11 +18,14 @@ Two different distributions of SYNAPTIC are provided: Jar Distribution and Java 
 
 #### Jar Distribution (CLI)
 
-jar file containing all the Java code for training and testing. It can be download at this address: https://github.com/rzanoli/synaptic/........ 
+jar file containing all the Java code for training and testing. It can be download at this address: 
+
+https://github.com/rzanoli/synaptic/........ 
 
 #### Java Source Distribution (API)
 
 Maven project that you can download from gihub by running the following command:
+
 ```> git clone https://github.com/rzanoli/...............```
 
 
