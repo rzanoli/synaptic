@@ -18,21 +18,20 @@ Two different distributions of SYNAPTIC are provided: Jar Distribution and Java 
 
 #### Jar Distribution (CLI)
 
-jar file containing all the Java code for training and testing. It can be download at this address: 
+This is a jar file containing all the Java code for training and testing. It can be download from this address: 
 
 https://github.com/rzanoli/synaptic/........ 
 
 #### Java Source Distribution (API)
 
-Maven project that you can download from gihub by running the following command:
+It is a Maven project that you can download from gihub by running the following command:
 
-```> git clone https://github.com/rzanoli/...............```
+```> git clone git@github.com:rzanoli/synaptic.git```
 
 
 ## CLI Instructions
 
-After getting the Jar Distribution as explained above, you are ready for training the classifier on a dataset and annotating new examples. These instructions are valid for both the 'sentiment' classifier and 'type' classifier. In the rest of this section we will report instructions only for the 'sentiment' classifier but they remain also valid for the other classifier: it is sufficient to change the package name from 'sa' to 'tc' and the classifier name prefix from 'Sentiment' to 'Type' (i.e.,
-sa.SentimentLearn --> tc.TypeLearn, sa.SentimentClassify --> tc.TypeClassify).
+After getting the Jar Distribution as explained above, you are ready for training the classifier on a dataset and annotating new examples. These instructions are valid for both the 'sentiment' classifier and 'type' classifier. In the rest of this section we will only report instructions for the 'sentiment' classifier but they remain valid for the other classifier: it is sufficient to change the package name from 'sa' to 'tc' and the classifier's name prefix from 'Sentiment' to 'Type' (i.e., sa.SentimentLearn --> tc.TypeLearn, sa.SentimentClassify --> tc.TypeClassify).
 
 ### Installation
 
@@ -40,7 +39,7 @@ Save the jar file downloaded into your working directory.
 
 ### Training
 
-From your working directory, run the following command:
+From the working directory, run the following command:
 
 ```> java -cp ....jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentLearn -f datasetFileName -m modelFileName```
 
@@ -50,7 +49,7 @@ Where:
 
 Produced files:
  	
-- modelFileName				the model
+- modelFileName				the trained model
 - modelFileName.features.index		the features index
 - modelFileName.labels.index		the labels index
 - datasetFileName.sa.token		the pre-processed dataset
@@ -72,7 +71,7 @@ Where:
 
 ## API Instructions
 
-SYNAPTIC has been developed as a Maven project and after getting its java Source Distribution as explained above, you first need to install its maven artifact into your local maven repository (i.e., m2), and then put the following dependency into the project file (i.e., pom.xml) of your java project.
+SYNAPTIC has been developed as a Maven project and after getting its java Source Distribution as explained above, you need to install its maven artifact into your local maven repository (i.e., m2). Then you have to put the following dependency into the project file (i.e., pom.xml) of your java project.
 
 ```
 <dependency>
@@ -84,7 +83,7 @@ SYNAPTIC has been developed as a Maven project and after getting its java Source
 
 ### Installation
 
-Copy the project that you have cloned from github into your working directory, and from that directory, run the following maven command to install the SYNAPTIC artifact into your maven local repository:
+Copy the project that you have cloned from github into your working directory, and then from that directory run the following maven command to install the SYNAPTIC artifact into your maven local repository:
 
 ```
 > mvn install
@@ -111,7 +110,7 @@ Where:
 
 ### Classifying
 
-The following piece of code can be used to annotate new examples by using the classifier trained in the previous step:
+Once the classifier has been trained ypu can use the generated model to annotate new examples; the following piece of code does this operation:
 
 ```java
 try {
@@ -139,12 +138,15 @@ import eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentLearn;
 /**
 *
 * This class shows an example on how the SYNAPTIC API can be used for training the semantic classifier on
-* a given dataset and then use the produced classifier for classifying the same dataset.
+* a given dataset and then use the produced classifier for classifying a new dataset. The training dataset is a tsv file
+* in the format as described by the class FileTSV (it is included in the project), while the dataset to annotate contains
+* raw texts each of them on a separate line.
 *
 */
 public class LearnAndClassifyTest {
 
-	private static String dataSet = "dataset.tsv"; // your dataset 
+	private static String trainDataset = "train_dataset.tsv"; // training dataset
+	private static String testDataset = "test_dataset.tsv"; // the dataset to annotate
 	private static String model = "/tmp/dataset.sa.model";
 
         /**
@@ -153,7 +155,7 @@ public class LearnAndClassifyTest {
 	public static void Learn() throws Exception {
 
 		SentimentLearn semanticLearn = new SentimentLearn();
-		semanticLearn.run(dataSet, model);
+		semanticLearn.run(trainDataset, model);
 
 	}
 
@@ -167,24 +169,14 @@ public class LearnAndClassifyTest {
 		try {
 			SentimentClassify semanticClassify = new SentimentClassify(model);
 			File file = new File(dataSet);
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
+			in = new BufferedReader(new InputStreamReader(new FileInputStream(testDataset), "UTF8"));
 			String str;
-			double examples = 0;
-			double correctPredictions = 0;
 			while ((str = in.readLine()) != null) {
-				String[] splitLine = str.split("\t");
-				String content = splitLine[4]; 
-				String goldLabel = splitLine[2]; //sentiment label
-				String[] annotation = semanticClassify.run(content);
+				String[] annotation = semanticClassify.run(str);
 				String label = annotation[0]; //predicted label
 				String score = annotation[1]; //and its score
 				System.out.println("predicted label:" + label + " score:" + score);
-				if (goldLabel.equals(label))
-					correctPredictions++;
-				examples++;
 			}
-			System.out.println("accuracy:" + correctPredictions/examples);
-			
 		} catch (Exception ex) {
 			throw(ex);
 		} finally {
