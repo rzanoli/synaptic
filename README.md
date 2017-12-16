@@ -1,6 +1,6 @@
 # synaptic
 
-The SYNAPTIC library consists of several components for pre-processing data (e.g., tokenization), extracting relevant features and for 'sentiment' and 'type' classification for German. Training and classification operations are accessible via the SYNAPTIC Application Program Interface (API). In addition, a Command Line Interface (CLI) is provided for convenience of experiments and training.
+The SYNAPTIC library consists of some components for pre-processing data (e.g., tokenization), extracting relevant features and for 'sentiment' and 'type' classification for German. Training and classification operations are accessible via the SYNAPTIC Application Program Interface (API). In addition, a Command Line Interface (CLI) is provided for convenience of experiments and training.
 
 ## Getting started
 
