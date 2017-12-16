@@ -112,7 +112,7 @@ public class FeatureExtractorClassify extends AbstractFeatureExtractor {
 
 			String str;
 			while ((str = buffer.readLine()) != null) {
-				String[] splitLine = str.split("\\s");
+				String[] splitLine = str.split("\t");
 				String label = splitLine[0];
 				double index = Double.parseDouble(splitLine[1]);
 				this.inverseLabelsIndex.put(index, label);
@@ -144,7 +144,7 @@ public class FeatureExtractorClassify extends AbstractFeatureExtractor {
 
 			String str;
 			while ((str = buffer.readLine()) != null) {
-				String[] splitLine = str.split("\\s");
+				String[] splitLine = str.split("\t");
 				int index = Integer.valueOf(splitLine[1]);
 				String feature = splitLine[0];
 				this.featuresIndex.put(feature, index);

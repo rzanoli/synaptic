@@ -109,9 +109,9 @@ public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 				// get the label of the current example
 				String label = splitLine[datasetLabelIndex];
 				// check the current label
-				if (label.indexOf(" ") != -1)
-					throw new Exception("Error in line " + lineCounter + ": labels can not contain space characters!");
-				else if (label.length() == 0)
+				//if (label.indexOf(" ") != -1)
+				//throw new Exception("Error in line " + lineCounter + ": labels can not contain space characters!");
+				if (label.length() == 0)
 					throw new Exception(
 							"Error in line " + lineCounter + ": labels must consist of at least one character!");
 				// build the labels index
@@ -121,7 +121,7 @@ public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 				else {
 					index = labelsIndex.size() + 1; // labels start from index 1
 					labelsIndex.put(label, index);
-					outLabelsIndex.write(label + " " + index + "\n"); // update
+					outLabelsIndex.write(label + "\t" + index + "\n"); // update
 																		// the
 																		// labels
 																		// index
@@ -150,7 +150,7 @@ public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 					else {
 						featureIndex = featuresIndex.size() + 1;
 						featuresIndex.put(feature, featureIndex);
-						outFeaturesIndex.write(feature + " " + featureIndex + "\n");
+						outFeaturesIndex.write(feature + "\t" + featureIndex + "\n");
 					}
 					// write the example
 					outFeaturesVector.write(" " + featureIndex + ":1"); // print
