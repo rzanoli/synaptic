@@ -43,7 +43,7 @@ ID	start/end time	sentiment	type	Content
 
 As regards the dataset to annotate the classifier accepts in input single texts in raw text format, e.g.,
 
-Der Kessel funktioniert schlecht; Das Befehlsmodul antwortet nicht
+```Der Kessel funktioniert schlecht; Das Befehlsmodul antwortet nicht```
 
 ## CLI Instructions
 
