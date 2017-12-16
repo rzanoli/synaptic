@@ -20,7 +20,7 @@ Two different distributions of SYNAPTIC are provided: Jar Distribution and Java 
 
 This is a jar file containing all the Java code for training and testing. It can be download from this address: 
 
-https://github.com/rzanoli/synaptic/........ 
+https://github.com/rzanoli/synaptic/releases/download/v1.0/synaptic-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 #### Java Source Distribution (API)
 
@@ -55,7 +55,7 @@ Save the jar file downloaded into your working directory.
 
 From the working directory, run the following command:
 
-```> java -cp ....jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentLearn -f datasetFileName -m modelFileName```
+```> java -cp synaptic-1.0-SNAPSHOT-jar-with-dependencies.jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentLearn -f datasetFileName -m modelFileName```
 
 Where:
 - datasetFileName is the name of the file containing the training dataset for training the classifier 
@@ -76,7 +76,7 @@ the generated files with prefix 'modelFileName' will be used in the next phase f
 
 From your working directory, run the following command:
 
-```> java -cp ....jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentClassifier -c content -m modelFileName```
+```> java -cp synaptic-1.0-SNAPSHOT-jar-with-dependencies.jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentClassifier -c content -m modelFileName```
 
 Where: 
 - content is the text string to classify 
