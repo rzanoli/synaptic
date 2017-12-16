@@ -41,7 +41,9 @@ ID	start/end time	sentiment	type	Content
 #2	2015	neutral	other	Dieser Kessel funktioniert gut, aber die Steuerung könnte schneller sein
 ```
 
-As regards the dataset to annotate the classifier accepts in input single contents in raw text format.
+As regards the dataset to annotate the classifier accepts in input single texts in raw text format, e.g.,
+
+Der Kessel funktioniert schlecht; Das Befehlsmodul antwortet nicht
 
 ## CLI Instructions
 
