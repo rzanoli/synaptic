@@ -51,7 +51,7 @@ After getting the Jar Distribution as explained above, you are ready for trainin
 
 ### Installation
 
-Save the SYNAPTIC jar file that you have just downaloded downloaded into your working directory.
+Save the SYNAPTIC jar file that you have just downaloded into your working directory.
 
 ### Training
 
