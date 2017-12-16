@@ -35,10 +35,11 @@ The training dataset to train the classifier is a tsv file that contains the fol
 ID \t start/end time \t sentiment \t type \t Content
 
 e.g.,
-
+```
 ID	start/end time	sentiment	type	Content
 #1	2016	negative	bug_report	Der Kessel funktioniert schlecht; Das Befehlsmodul antwortet nicht
 #2	2015	neutral	other	Dieser Kessel funktioniert gut, aber die Steuerung könnte schneller sein
+```
 
 As regards the dataset to annotate the classifier accepts in input single contents in raw text format.
 
