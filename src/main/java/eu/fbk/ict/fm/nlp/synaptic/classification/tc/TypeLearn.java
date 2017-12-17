@@ -43,11 +43,11 @@ import eu.fbk.ict.fm.nlp.synaptic.classification.AbstractLearn;
  * 
  * Produced files:
  * 
- * 		modelFileName.sa.model					the generated model to use for annotating new examples
- * 		modelFileName.sa.model.features.index	the features index to use for annotating new examples
- *      modelFileName.sa.model.labels.index		the labels index to use for annotating new examples
- * 		datasetFileName.sa.token				the pre-processed dataset in input to use for debugging
- * 		datasetFileName.sa.token.vectors		the features vectors of the dataset in input to use for debugging
+ * 		modelFileName							the generated model to use for annotating new examples
+ * 		modelFileName.features.index			the features index to use for annotating new examples
+ *      modelFileName.labels.index				the labels index to use for annotating new examples
+ * 		datasetFileName.tc.token				the pre-processed dataset in input to use for debugging
+ * 		datasetFileName.tc.token.vectors		the features vectors of the dataset in input to use for debugging
  * 
  * 
  * @author zanoli

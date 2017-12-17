@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -189,6 +188,7 @@ public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 
 	}
 
+	/*
 	public static void main(String args[]) {
 
 		try {
@@ -205,6 +205,6 @@ public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 			LOGGER.log(Level.SEVERE, ex.getMessage());
 		}
 
-	}
+	}*/
 
 }

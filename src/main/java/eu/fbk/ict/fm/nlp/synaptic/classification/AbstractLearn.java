@@ -24,7 +24,7 @@ public abstract class AbstractLearn implements ILearn {
 	 * Learns a model given the input training dataset.
 	 * 
 	 * @param inputDataFileName the input training dataset file name
-	 * @param model the output model file name
+	 * @param modelFileName the output model file name
 	 * 
 	 */
 	public void learn(String inputDataFileName, String modelFileName) throws Exception {

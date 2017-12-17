@@ -163,14 +163,16 @@ public class SentimentClassify extends AbstractClassify {
 
 			// parse the command line arguments
 			CommandLine cmd = parser.parse(options, args);
-
+			// the text to annotate
 			String text = cmd.getOptionValue("content");
+			// the model to use
 			String modelFileName = cmd.getOptionValue("model");
-
+			// create an instance of the classifier
 			SentimentClassify sentimentClassify = new SentimentClassify(modelFileName);
+			// run the classifier
 			String[] result = sentimentClassify.run(text);
-			String label = result[0];
-			String score = result[1];
+			String label = result[0]; // the predicted label
+			String score = result[1]; // and its score
 
 			LOGGER.info("predicted label:" + label + " score:" + score);
 

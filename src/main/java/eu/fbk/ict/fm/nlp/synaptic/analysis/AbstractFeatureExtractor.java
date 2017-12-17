@@ -11,16 +11,16 @@ public class AbstractFeatureExtractor {
 
 	// The features index containing the mapping between the produced features
 	// and their numeric IDs used by the classifiers.
-	// This index is produced during the classifier training phase and then used
+	// This index is produced during the classifier training phase and then is used
 	// during the classifier test phase.
 	protected HashMap<String, Integer> featuresIndex;
 	// It is used to create a mapping between the labels of the annotated data
 	// set and their numeric IDs used by the classifiers.
-	// This index is produced during the classifier training phase and then used
+	// This index is produced during the classifier training phase and then is used
 	// during the classifier test phase.
 	protected HashMap<String, Integer> labelsIndex;
-	// The labels index containing the mapping between the labels of the
-	// annotated dataset and their numeric IDs used.
+	// The labels index containing the mapping between the labels IDs 
+	// and their text.
 	// It is used by the classifiers to change from their numeric predictions to the
 	// corresponding labels.
 	protected HashMap<Double, String> inverseLabelsIndex;
@@ -127,8 +127,7 @@ public class AbstractFeatureExtractor {
 	/**
 	 * Gets the label string given its numeric id
 	 * 
-	 * @param the
-	 *            label id
+	 * @param labelId the label id
 	 * 
 	 * @return the label string
 	 * 

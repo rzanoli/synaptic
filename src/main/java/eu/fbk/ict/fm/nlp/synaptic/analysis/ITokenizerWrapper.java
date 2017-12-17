@@ -41,7 +41,7 @@ public interface ITokenizerWrapper {
 	 * @exception Exception
 	 * 
 	 */
-	public String[] tokenize(String content) throws Exception;
+	public String[] tokenize(String text) throws Exception;
 
 	/**
 	 * Tokenizes the text that is in the input file (field 'content') in the tsv

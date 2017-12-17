@@ -170,8 +170,8 @@ public class TypeClassify extends AbstractClassify {
 			TypeClassify typeClassify = new TypeClassify(modelFileName);
 			// run the classifier
 			String[] result = typeClassify.run(text);
-			String label = result[0];
-			String score = result[1];
+			String label = result[0]; // the predicted label
+			String score = result[1]; // and its score
 
 			LOGGER.info("predicted label:" + label + " score:" + score);
 
