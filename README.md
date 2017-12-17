@@ -78,10 +78,10 @@ the generated files with prefix 'modelFileName' will be used in the next phase f
 
 From your working directory, run the following command:
 
-```> java -cp synaptic-1.0-SNAPSHOT-jar-with-dependencies.jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentClassifier -c content -m modelFileName```
+```> java -cp synaptic-1.0-SNAPSHOT-jar-with-dependencies.jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentClassify -c content -m modelFileName```
 
 Where: 
-- content is the text string to classify 
+- content is the text string to classify, e.g., "Der Kessel funktioniert schlecht"
 - modelFileName is the model generated during the classifier training phase (it consists of all the 3 files generated during the training phase: modelFileName, modelFileName.features.index, modelFileName.labels.index that have to stay in the same directory).
 
 
