@@ -92,7 +92,7 @@ SYNAPTIC has been developed as a Maven project and after getting its java Source
 ```
 <dependency>
 	<groupId>eu.fbk.ict.fm.nlp</groupId>
-	<artifactId>classifier</artifactId>
+	<artifactId>synaptic</artifactId>
 	<version>1.0-SNAPSHOT</version>
 </dependency>
 ```
