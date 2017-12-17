@@ -2,7 +2,6 @@ package eu.fbk.ict.fm.nlp.synaptic.analysis;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,20 +29,32 @@ public class TokenizerWrapper implements ITokenizerWrapper {
 	// the logger
 	private static final Logger LOGGER = Logger.getLogger(TokenizerWrapper.class.getName());
 	
-	// the OpenNLP model for tokenization; it is available from the resources
-	// directory
-	private File modelFile;
+	// the OpenNLP tokenizer
+	private Tokenizer tokenizer;
 
 	/**
 	 * Initializes the tokenizer by loading the needed resources (e.g., the
 	 * model for tokenization)
 	 */
-	public void init() {
+	public void init() throws Exception  {
 
-		// Get model from resources folder
-		ClassLoader classLoader = TokenizerWrapper.class.getClassLoader();
-		modelFile = new File(classLoader.getResource("de-token.bin").getFile());
-
+		InputStream modelIn = null;
+		
+		try {
+			// Get model from resources folder
+			modelIn = getClass().getResourceAsStream("/de-token.bin");
+			TokenizerModel model = new TokenizerModel(modelIn);
+			// Create an instance of the tokenizer
+			tokenizer = new TokenizerME(model);
+		} finally {
+			if (modelIn != null) {
+				try {
+					modelIn.close();
+				} catch (final IOException e) {
+				} // oh well!
+			}
+		}
+		
 	}
 
 	
@@ -55,19 +66,7 @@ public class TokenizerWrapper implements ITokenizerWrapper {
 		if (text == null)
 			return tokens;
 		
-		InputStream is = null;
-		try {
-			is = new FileInputStream(modelFile);
-			// loads the model
-			TokenizerModel model = new TokenizerModel(is);
-			// then the OpenNLP tokenizer
-			Tokenizer tokenizer = new TokenizerME(model);
-			// and finally tokenizes the given text
-			tokens = tokenizer.tokenize(text);
-		} finally {
-			if (is != null)
-				is.close();
-		}
+		tokens = tokenizer.tokenize(text);
 
 		return tokens;
 

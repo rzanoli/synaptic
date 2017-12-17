@@ -26,7 +26,7 @@ public interface ITokenizerWrapper {
 	 * Initializes the tokenizer by loading the needed resources (e.g., the
 	 * model for tokenization)
 	 */
-	public void init();
+	public void init() throws Exception;
 
 	/**
 	 * Tokenizes the input raw text and returns it as an array of tokenized

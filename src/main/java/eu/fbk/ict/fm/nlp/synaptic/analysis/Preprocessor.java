@@ -23,7 +23,7 @@ public class Preprocessor implements IPreprocessor {
 	/**
 	 * Class constructor
 	 */
-	public Preprocessor() {
+	public Preprocessor() throws Exception {
 
 		// create an instance of the tokenizer
 		tokenizerWrapper = new TokenizerWrapper();
@@ -55,7 +55,7 @@ public class Preprocessor implements IPreprocessor {
 	 * 
 	 * @param args
 	 */
-	public static void main(String args[]) {
+	public static void main(String args[]) throws Exception {
 
 		// create an instance of the preprocessor
 		Preprocessor preprocessor = new Preprocessor();

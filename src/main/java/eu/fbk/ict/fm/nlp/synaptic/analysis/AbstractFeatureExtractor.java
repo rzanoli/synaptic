@@ -1,8 +1,6 @@
 package eu.fbk.ict.fm.nlp.synaptic.analysis;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -106,15 +104,11 @@ public class AbstractFeatureExtractor {
 	 */
 	public void loadStopWords() throws Exception {
 
-		// Get model from resources folder
-		ClassLoader classLoader = getClass().getClassLoader();
-
 		BufferedReader buffer = null;
 
 		try {
 
-			File file = new File(classLoader.getResource("stopwords-de.txt").getFile());
-			buffer = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
+			buffer = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/stopwords-de.txt")));
 
 			String str;
 			while ((str = buffer.readLine()) != null) {
