@@ -111,8 +111,11 @@ public class SentimentLearn extends AbstractLearn {
 		int datasetLabelPosition = FileTSV.SENTIMENT;
 		featureExtractor.extract(preprocessedDataSetFileName, feacturesVectorFileName, featuresIndexFileName,
 				labelsIndexFileName, datasetLabelPosition);
+		
+		LOGGER.info("Learning...");
 		// learn the classifier
 		learn(feacturesVectorFileName, modelFileName);
+		LOGGER.info("done.");
 
 	}
 
@@ -153,13 +156,13 @@ public class SentimentLearn extends AbstractLearn {
 
 			// parse the command line arguments
 			CommandLine cmd = parser.parse(options, args);
-
+			// training data set
 			String dataSetFileName = cmd.getOptionValue("file");
+			// model to generate
 			String modelFileName = cmd.getOptionValue("model");
-
+			// create an instance of the classifier
 			SentimentLearn sentimentLearn = new SentimentLearn();
-			sentimentLearn.setCrossValidation(1);
-
+			// run the classifier
 			sentimentLearn.run(dataSetFileName, modelFileName);
 
 		} catch (ParseException e) {

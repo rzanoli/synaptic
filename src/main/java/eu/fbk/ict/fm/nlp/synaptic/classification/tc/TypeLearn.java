@@ -114,8 +114,11 @@ public class TypeLearn extends AbstractLearn {
 		int datasetLabelPosition = FileTSV.TYPE;
 		featureExtractor.extract(preprocessedDataSetFileName, feacturesVectorFileName, featuresIndexFileName,
 				labelsIndexFileName, datasetLabelPosition);
+		
+		LOGGER.info("Learning...");
 		// learn the classifier
 		learn(feacturesVectorFileName, modelFileName);
+		LOGGER.info("done.");
 
 	}
 
@@ -161,7 +164,6 @@ public class TypeLearn extends AbstractLearn {
 			String dataSetFileName = cmd.getOptionValue("file");
 			// the model to generate
 			String modelFileName = cmd.getOptionValue("model");
-
 			// create an instance of the classifier
 			TypeLearn typeLearn = new TypeLearn();
 			// run the classifier
