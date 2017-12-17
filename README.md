@@ -24,9 +24,9 @@ https://github.com/rzanoli/synaptic/releases/download/v1.0/synaptic-1.0-SNAPSHOT
 
 #### Java Source Distribution (API)
 
-It is a Maven project that you can download from gihub by running the following command:
+The zip file of the Maven project containing the project source code:
 
-```> git clone git@github.com:rzanoli/synaptic.git```
+https://github.com/rzanoli/synaptic/archive/v1.0.zip
 
 ### Dataset format
 
