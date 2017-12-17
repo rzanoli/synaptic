@@ -10,7 +10,6 @@ These instructions will get you a copy of the project up and running on your loc
 
 - Java 1.7 or later
 - Apache Maven (http://maven.apache.org) (required by SYNAPTIC API)
-- git (required by SYNAPTIC API)
 
 ### How to get the code
 
