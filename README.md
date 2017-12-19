@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-- Java 1.7 or later
+- Java 1.8 or later
 - Apache Maven (http://maven.apache.org) (required by SYNAPTIC API)
 
 ### How to get the code
