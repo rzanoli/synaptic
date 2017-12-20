@@ -53,7 +53,7 @@ public class SentimentClassify extends AbstractClassify {
 	private static final Logger LOGGER = Logger.getLogger(SentimentClassify.class.getName());
 
 	// enable stop words removal
-	private static boolean enableStopWordsRemoval = true;
+	private static boolean enableStopWordsRemoval = false;
 
 	// the preprocessor for pre-processing data
 	private Preprocessor preprocessor;

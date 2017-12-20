@@ -53,7 +53,7 @@ public class TypeClassify extends AbstractClassify {
 	private static final Logger LOGGER = Logger.getLogger(TypeClassify.class.getName());
 
 	// enable stop words removal
-	private static boolean enableStopWordsRemoval = false;
+	private static boolean enableStopWordsRemoval = true;
 
 	// the preprocessor for pre-processing data
 	private Preprocessor preprocessor;

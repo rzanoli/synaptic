@@ -61,7 +61,7 @@ public class TypeLearn extends AbstractLearn {
 	private static final Logger LOGGER = Logger.getLogger(TypeLearn.class.getName());
 
 	// disable stop words removal
-	private static boolean enableStopWordsRemoval = false;
+	private static boolean enableStopWordsRemoval = true;
 	// the preprocessor for pre-processing data
 	private Preprocessor preprocessor;
 	// the feature extractor for extrating the features from the dataset
