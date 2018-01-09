@@ -73,7 +73,7 @@ Produced files:
 the generated files with prefix 'modelFileName' will be used in the next phase for annotating new examples while the files with prefix 'datasetFileName' are produced for training the classifier and the saved for debugging purposes only.
 
 
-### Classifying
+### Classification
 
 From your working directory, run the following command:
 
@@ -82,6 +82,18 @@ From your working directory, run the following command:
 Where: 
 - content is the text string to classify, e.g., "Der Kessel funktioniert schlecht"
 - modelFileName is the model generated during the classifier training phase (it consists of all the 3 files generated during the training phase: modelFileName, modelFileName.features.index, modelFileName.labels.index that have to stay in the same directory).
+
+
+### Evaluation
+
+From the working directory, run the following command to perform 10-Fold Cross-Validation and evaluate the classifier:
+
+```> java -cp synaptic-1.0-SNAPSHOT-jar-with-dependencies.jar eu.fbk.ict.fm.nlp.synaptic.classification.sa.SentimentLearn -f datasetFileName -m modelFileName -c```
+
+Where:
+- datasetFileName is the name of the file containing the training dataset for evaluating the classifier 
+- modelFileName is the file name of the model (it is requested but not generated)
+- 'c' to perform cross validation
 
 
 ## API Instructions
@@ -123,7 +135,7 @@ Where:
 - datasetFileName is the training dataset for training the classifier 
 - modelFileName is the model generated during the classifier training phase
 
-### Classifying
+### Classification
 
 Once the classifier has been trained ypu can use the generated model to annotate new examples; the following piece of code does this operation:
 
