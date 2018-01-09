@@ -66,6 +66,19 @@ public abstract class AbstractLearn implements ILearn {
 		this.crossValidation = crossValidation;
 		
 	}
+	
+	
+	/**
+	 * Gets if the classifier has to perform cross-validation or training
+	 * 
+	 * @return 1 for cross-validation; 0 otherwise
+	 */
+	public int getCrossValidation() {
+		
+		return this.crossValidation;
+		
+	}
+	
 
 	/**
 	 * Reads the file containing the features vectors produced by the FeatureExtractorLearn component,

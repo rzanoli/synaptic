@@ -61,7 +61,7 @@ public class TypeLearn extends AbstractLearn {
 	private static final Logger LOGGER = Logger.getLogger(TypeLearn.class.getName());
 
 	// disable stop words removal
-	private static boolean enableStopWordsRemoval = true;
+	private static boolean enableStopWordsRemoval = false;
 	// the preprocessor for pre-processing data
 	private Preprocessor preprocessor;
 	// the feature extractor for extrating the features from the dataset
@@ -147,6 +147,11 @@ public class TypeLearn extends AbstractLearn {
 		Option model = new Option("m", "model", true, "model to produce");
 		model.setRequired(true);
 		options.addOption(model);
+		
+		// add data set option
+		Option crossValidation = new Option("c", "cross_validation", false, "enable cross validation");
+		crossValidation.setRequired(false);
+		options.addOption(crossValidation);
 
 		// create the command line parser
 		CommandLineParser parser = new BasicParser();
@@ -166,6 +171,10 @@ public class TypeLearn extends AbstractLearn {
 			String modelFileName = cmd.getOptionValue("model");
 			// create an instance of the classifier
 			TypeLearn typeLearn = new TypeLearn();
+			// enable cross validation
+			boolean enableCrossValidation = cmd.hasOption("cross_validation");
+			if (enableCrossValidation)
+				typeLearn.setCrossValidation(1);
 			// run the classifier
 			typeLearn.run(dataSetFileName, modelFileName);
 

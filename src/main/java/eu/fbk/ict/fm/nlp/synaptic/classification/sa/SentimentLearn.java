@@ -144,6 +144,11 @@ public class SentimentLearn extends AbstractLearn {
 		Option model = new Option("m", "model", true, "model to produce");
 		model.setRequired(true);
 		options.addOption(model);
+		
+		// add data set option
+		Option crossValidation = new Option("c", "cross_validation", false, "enable cross validation");
+		crossValidation.setRequired(false);
+		options.addOption(crossValidation);
 
 		// create the command line parser
 		CommandLineParser parser = new BasicParser();
@@ -162,6 +167,10 @@ public class SentimentLearn extends AbstractLearn {
 			String modelFileName = cmd.getOptionValue("model");
 			// create an instance of the classifier
 			SentimentLearn sentimentLearn = new SentimentLearn();
+			// enable cross validation
+			boolean enableCrossValidation = cmd.hasOption("cross_validation");
+			if (enableCrossValidation)
+				sentimentLearn.setCrossValidation(1);	
 			// run the classifier
 			sentimentLearn.run(dataSetFileName, modelFileName);
 
