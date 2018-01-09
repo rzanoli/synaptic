@@ -92,7 +92,7 @@ From the working directory, run the following command to perform 10-Fold Cross-V
 
 Where:
 - datasetFileName is the name of the file containing the training dataset for evaluating the classifier 
-- modelFileName is the file name of the model (it is requested but the model will not be generated)
+- modelFileName is the file name of the model (it is requested to produce the features but the model will not be generated)
 - 'c' to perform cross validation
 
 
@@ -167,7 +167,7 @@ try {
 
 Where: 
 - datasetFileName is the training dataset for training the classifier 
-- modelFileName is the model (it is requested but the model will not be generated)
+- modelFileName is the model (it is requested to produce the features but the model will not be generated)
 
 
 
