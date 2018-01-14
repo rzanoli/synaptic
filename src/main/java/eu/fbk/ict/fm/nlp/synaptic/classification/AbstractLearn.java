@@ -3,6 +3,11 @@ package eu.fbk.ict.fm.nlp.synaptic.classification;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -34,12 +39,14 @@ public abstract class AbstractLearn implements ILearn {
 		//param.probability = 1;
 		//param.gamma = 0.5;
 		//param.nu = 0.5;
-		param.C = 1;
+		param.C = 0.001;
 		param.svm_type = svm_parameter.C_SVC;
 		param.kernel_type = svm_parameter.LINEAR;
+		//param.kernel_type = svm_parameter.POLY;
+		//param.degree = 2;
 		param.cache_size = 20000;
 		param.eps = 0.001;
-		nFold = 10;
+		nFold = 600;
 
 		// load the training dataset that contains the features vectors
 		loadDataSet(inputDataFileName);
@@ -117,7 +124,7 @@ public abstract class AbstractLearn implements ILearn {
 				max_index = Math.max(max_index, x[m - 1].index);
 			vx.addElement(x);
 		}
-
+		
 		prob = new svm_problem();
 		prob.l = vy.size();
 		prob.x = new svm_node[prob.l][];
@@ -136,6 +143,9 @@ public abstract class AbstractLearn implements ILearn {
 	 */
 	private void crossValidation() {
 
+		// the confusion matric to calculate precision and recall
+		int[][] confusionMatrix = new int[10][10];
+		
 		int i;
 		int total_correct = 0;
 		double total_error = 0;
@@ -160,14 +170,75 @@ public abstract class AbstractLearn implements ILearn {
 							/ ((prob.l * sumvv - sumv * sumv) * (prob.l * sumyy - sumy * sumy))
 					+ "\n");
 		} else {
-			for (i = 0; i < prob.l; i++)
+			for (i = 0; i < prob.l; i++) {
 				if (target[i] == prob.y[i])
 					++total_correct;
-			System.out.print("Cross Validation Accuracy = " + 100.0 * total_correct / prob.l + "%\n");
+				// fill the confusion matrix
+				confusionMatrix[(int)target[i]][(int)prob.y[i]] = confusionMatrix[(int)target[i]][(int)prob.y[i]] + 1;
+			
+			}
+			// print the confusion matrix
+			/*
+			for (int x = 0; x < confusionMatrix.length; x++) {
+				for (int y = 0; y < confusionMatrix.length; y++)
+					System.out.print(confusionMatrix[x][y] + "\t");
+				System.out.println();
+			}
+			*/
+			
+			System.out.println("\n\nCross Validation");
+			System.out.println("================\n");
+			
+			System.out.print("Accuracy = " + 100.0 * total_correct / prob.l + "%\n");
+			
+			// total number of true positive, false positive, false negative and true negative
+			int tp_tot = 0;
+			int fp_tot = 0;
+			int fn_tot = 0;
+			int tn_tot = 0;
+			
+			for (int l = 0; l < confusionMatrix.length; l++) {
+				// true positive, false positive, false negative and true negative
+				// for the current label
+				int tp = 0;
+				int fp = 0;
+				int fn = 0;
+				int tn = 0;
+				for (int x = 0; x < confusionMatrix.length; x++) {
+					for (int y = 0; y < confusionMatrix.length; y++) {
+						if (l == x) {
+							if (x == y)
+								tp = tp + confusionMatrix[x][y];
+							else
+								fp = fp + confusionMatrix[x][y];
+						}
+						else {
+							if (l == y)
+								fn = fn + confusionMatrix[x][y];
+							else
+								tn = tn + confusionMatrix[x][y];
+						}
+					}
+					tp_tot = tp_tot + tp;
+					fp_tot = fp_tot + fp;
+					fn_tot = fn_tot + fn;
+					tn_tot = tn_tot + tn;
+				}
+				// calculate precision, recall and F1 measure for the current label
+				if (tp != 0 || fn != 0) {
+				    float precision = (float)tp/(float)(tp + fp);
+				    float recall = (float)tp/(float)(tp + fn);
+				    float f1 = 2*precision*recall/(precision+recall);
+					System.out.println("label:" + l + "\tprecison:" + precision + "\trecall:" + recall + "\tf1:" + f1);
+				}
+				
+			}
+			
+			float accuracy = (float)(tp_tot)/(float)(tp_tot + fp_tot);
+			System.out.println("\naccuracy:" + accuracy);
+			
 		}
 	}
-	
-	
 	
 	private static double atof(String str) {
 		
