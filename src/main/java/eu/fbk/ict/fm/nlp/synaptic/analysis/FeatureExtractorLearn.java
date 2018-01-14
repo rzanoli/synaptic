@@ -34,14 +34,17 @@ public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 	 */
 	public FeatureExtractorLearn(boolean enableStopWordsRemoval) throws Exception {
 
-		this.featuresIndex = new HashMap<String, Integer>();
+		this.featuresWeightAndIndex = new HashMap<String, String>();
 		this.labelsIndex = new HashMap<String, Integer>();
 		this.inverseLabelsIndex = new HashMap<Double, String>();
 		this.enableStopWordsRemoval = enableStopWordsRemoval;
 		this.stopWords = new HashSet<String>();
+		this.weightedWords = new HashMap<String,Float>();
 		// load the list of stop words that are in the resources directory
 		if (enableStopWordsRemoval)
 			loadStopWords();
+		
+		this.loadWeighteNgrams();
 
 	}
 
@@ -143,16 +146,23 @@ public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 				// generate the features vector of the current example
 				String[] features = generateNGrams(preprocessedText);
 				for (String feature : features) {
+					float featureWeight = 0;
 					int featureIndex = 0;
-					if (featuresIndex.containsKey(feature))
-						featureIndex = featuresIndex.get(feature);
-					else {
-						featureIndex = featuresIndex.size() + 1;
-						featuresIndex.put(feature, featureIndex);
-						outFeaturesIndex.write(feature + "\t" + featureIndex + "\n");
+					if (featuresWeightAndIndex.containsKey(feature)) {
+						String featureWeightAndIndex = featuresWeightAndIndex.get(feature);
+						featureWeight = Float.parseFloat(featureWeightAndIndex.split("___")[0]);
+						featureIndex = Integer.parseInt(featureWeightAndIndex.split("___")[1]);
 					}
-					// write the example
-					outFeaturesVector.write(" " + featureIndex + ":1"); // print
+					else {
+						featureWeight = getWordWeight(feature);
+						featureIndex = featuresWeightAndIndex.size() + 1;
+						String featureWeightAndIndex = featureWeight + "___" + featureIndex;
+						featuresWeightAndIndex.put(feature, featureWeightAndIndex);
+						if (featureWeight > 0)
+							outFeaturesIndex.write(feature + "\t" + featureWeight + "\t" + featureIndex + "\n");
+					}
+					// write the example: all features have weight equals to 1
+					//outFeaturesVector.write(" " + featureIndex + ":1"); // print
 																		// the
 																		// feature
 																		// (all
@@ -164,6 +174,9 @@ public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 																		// weight
 																		// equals
 																		// to 1)
+					// write the example: all features have weight equals to their idf value
+					if (featureWeight > 0)
+						outFeaturesVector.write(" " + featureIndex + ":" + featureWeight);
 				}
 				outFeaturesVector.write("\n");
 
@@ -187,7 +200,7 @@ public class FeatureExtractorLearn extends AbstractFeatureExtractor {
 		}
 
 	}
-
+	
 	/*
 	public static void main(String args[]) {
 

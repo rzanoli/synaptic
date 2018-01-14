@@ -2,18 +2,20 @@ package eu.fbk.ict.fm.nlp.synaptic.analysis;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class AbstractFeatureExtractor {
 
 	// The features index containing the mapping between the produced features
-	// and their numeric IDs used by the classifiers.
+	// and their pre-computed idf values and numeric IDs used by the classifiers.
 	// This index is produced during the classifier training phase and then is used
 	// during the classifier test phase.
-	protected HashMap<String, Integer> featuresIndex;
+	protected HashMap<String, String> featuresWeightAndIndex;
 	// It is used to create a mapping between the labels of the annotated data
 	// set and their numeric IDs used by the classifiers.
 	// This index is produced during the classifier training phase and then is used
@@ -27,6 +29,8 @@ public class AbstractFeatureExtractor {
 	// The list of stop words that have to be removed from the pre-processed
 	// text in input.
 	protected Set<String> stopWords;
+	// The list of words weighted by their idf values. The weights are used to build weighted features vectors.
+	protected Map<String,Float> weightedWords;
 	// Enable stop words removal.
 	protected boolean enableStopWordsRemoval;
 
@@ -76,6 +80,26 @@ public class AbstractFeatureExtractor {
 		return result;
 
 	}
+	
+	/**
+	 * Given a token it gets its weight (idf value)
+	 * 
+	 * @param token
+	 *            the input token
+	 * @return the weight of the token in input
+	 * 
+	 * @throws Exception
+	 */
+	public float getWordWeight(String token) throws Exception {
+
+		float result = (float) - 1;
+		
+		if (weightedWords.containsKey(token))
+			result = this.weightedWords.get(token);
+
+		return result;
+
+	}
 
 	/**
 	 * Normalizes the tokens in input to lower case
@@ -108,7 +132,7 @@ public class AbstractFeatureExtractor {
 
 		try {
 
-			buffer = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/stopwords-de.txt")));
+			buffer = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/stopwords-de.txt"), "UTF-8"));
 
 			String str;
 			while ((str = buffer.readLine()) != null) {
@@ -123,7 +147,41 @@ public class AbstractFeatureExtractor {
 		}
 
 	}
+	
+	/**
+	 * Loads the list of n-grams weighted by their idf values. They are used
+	 * to build weighted features vectors
+	 * 
+	 * 
+	 * @throws Exception
+	 */
+	public void loadWeighteNgrams() throws Exception {
+		
+		BufferedReader buffer = null;
+		double nDocuments = (double)1424635; // set by default: it is the number of documents in the data collection
 
+		try {
+
+			buffer = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/dewiki-20140216-ngram-1M.csv"), "UTF-8"));
+			
+			String str;
+			while ((str = buffer.readLine()) != null) {
+				String[] splitStr = str.split("\t");
+				double wordFrequency = Double.parseDouble(splitStr[0]);
+				String word = splitStr[2].toLowerCase().replace(" ", "___");
+				float idf = (float)Math.log10(nDocuments/wordFrequency);
+				weightedWords.put(word, idf);
+			}
+
+		} catch (Exception ex) {
+			throw (ex);
+		} finally {
+			if (buffer != null)
+				buffer.close();
+		}
+		
+	}
+	
 	/**
 	 * Gets the label string given its numeric id
 	 * 

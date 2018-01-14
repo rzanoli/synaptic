@@ -43,18 +43,21 @@ public class FeatureExtractorClassify extends AbstractFeatureExtractor {
 	public FeatureExtractorClassify(String featuresIndexFileName, String labelsIndexFileName,
 			boolean enableStopWordsRemoval) throws Exception {
 
-		this.featuresIndex = new HashMap<String, Integer>();
+		this.featuresWeightAndIndex = new HashMap<String, String>();
 		this.labelsIndex = new HashMap<String, Integer>();
 		this.inverseLabelsIndex = new HashMap<Double, String>();
 		this.enableStopWordsRemoval = enableStopWordsRemoval;
 		this.stopWords = new HashSet<String>();
+		this.weightedWords = new HashMap<String,Float>();
 
 		// load the list of stop words that are in the resources directory
 		if (enableStopWordsRemoval)
 			loadStopWords();
+		
+		this.loadWeighteNgrams();
 
 		// load the feaures index and labels index
-		loadFeaturesIndex(new File(featuresIndexFileName));
+		loadFeaturesWeightAndIndex(new File(featuresIndexFileName));
 		loadLabelsIndex(new File(labelsIndexFileName));
 
 	}
@@ -81,10 +84,14 @@ public class FeatureExtractorClassify extends AbstractFeatureExtractor {
 		// weight equals to 1
 		String[] features = generateNGrams(normalizedText);
 		for (String feature : features) {
+			float featureWeight = 0;
 			int featureIndex = 0;
-			if (featuresIndex.containsKey(feature)) {
-				featureIndex = featuresIndex.get(feature);
-				tmpList.add(featureIndex + ":1");
+			if (featuresWeightAndIndex.containsKey(feature)) {
+				String featureWeightAndIndex = featuresWeightAndIndex.get(feature);
+				featureWeight = Float.parseFloat(featureWeightAndIndex.split("___")[0]);
+				featureIndex = Integer.parseInt(featureWeightAndIndex.split("___")[1]);
+				//tmpList.add(featureIndex + ":1");
+				tmpList.add(featureIndex + ":" + featureWeight);
 			}
 		}
 
@@ -134,7 +141,7 @@ public class FeatureExtractorClassify extends AbstractFeatureExtractor {
 	 * 
 	 * @throws Exception
 	 */
-	private void loadFeaturesIndex(File file) throws Exception {
+	private void loadFeaturesWeightAndIndex(File file) throws Exception {
 
 		BufferedReader buffer = null;
 
@@ -145,9 +152,11 @@ public class FeatureExtractorClassify extends AbstractFeatureExtractor {
 			String str;
 			while ((str = buffer.readLine()) != null) {
 				String[] splitLine = str.split("\t");
-				int index = Integer.valueOf(splitLine[1]);
+				float weight = Float.parseFloat(splitLine[1]);
+				int index = Integer.valueOf(splitLine[2]);
+				String featureWeightAndIndex = weight + "___" + index;
 				String feature = splitLine[0];
-				this.featuresIndex.put(feature, index);
+				this.featuresWeightAndIndex.put(feature, featureWeightAndIndex);
 			}
 
 		} catch (Exception ex) {
