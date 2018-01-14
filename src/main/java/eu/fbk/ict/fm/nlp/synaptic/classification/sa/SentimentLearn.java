@@ -56,12 +56,12 @@ public class SentimentLearn extends AbstractLearn {
 
 	// the logger
 	private static final Logger LOGGER = Logger.getLogger(SentimentLearn.class.getName());
-
+  
 	// enable stop words removal
 	private static boolean enableStopWordsRemoval = false;
 	// the preprocessor for pre-processing data
 	private Preprocessor preprocessor;
-	// the feature extractor for extrating the features from the dataset
+	// the feature extractor for extracting the features from the dataset
 	private FeatureExtractorLearn featureExtractor;
 
 	/**
