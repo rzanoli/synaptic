@@ -39,14 +39,14 @@ public abstract class AbstractLearn implements ILearn {
 		//param.probability = 1;
 		//param.gamma = 0.5;
 		//param.nu = 0.5;
-		param.C = 0.001;
+		param.C = 1.0;
 		param.svm_type = svm_parameter.C_SVC;
 		param.kernel_type = svm_parameter.LINEAR;
 		//param.kernel_type = svm_parameter.POLY;
 		//param.degree = 2;
 		param.cache_size = 20000;
 		param.eps = 0.001;
-		nFold = 600;
+		nFold = 10;
 
 		// load the training dataset that contains the features vectors
 		loadDataSet(inputDataFileName);
