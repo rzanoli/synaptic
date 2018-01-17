@@ -215,7 +215,6 @@ public class LearnAndClassifyTest {
 
 		try {
 			SentimentClassify semanticClassify = new SentimentClassify(model);
-			File file = new File(dataSet);
 			in = new BufferedReader(new InputStreamReader(new FileInputStream(testDataset), "UTF8"));
 			String str;
 			while ((str = in.readLine()) != null) {
@@ -240,8 +239,8 @@ public class LearnAndClassifyTest {
 	public static void main(String[] args) {
 
 		try {
-			LearnClassifyTest.Learn();
-			LearnClassifyTest.Classify();
+			LearnAndClassifyTest.Learn();
+			LearnAndClassifyTest.Classify();
 		} catch (Exception ex) {
 			System.err.println(ex.getMessage());
 		}
