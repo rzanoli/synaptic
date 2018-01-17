@@ -1,7 +1,5 @@
 # synaptic
 
-The SYNAPTIC library consists of components for pre-processing data (e.g., tokenization), extracting relevant features and for 'sentiment' and 'type' classification for German. Training and classification operations are accessible via the SYNAPTIC Application Program Interface (API). In addition, a Command Line Interface (CLI) is provided for convenience of experiments and training.
-
 SYNAPTIC (Sentiment and Type Classifier) is an open source library for 'sentiment' and 'type' classification for German, which consists of components for pre-processing data, extracting relevant features and classification. To achieve its objectives, the system uses state-of-the-art machine learning techniques such as Support Vector Machines (SVM) and standard tools like LIBSVM  and OpenNLP . SYNAPTIC has been designed to meet the following requirements:
 - Distribution: distributed through its GitHub repository .
 - Efficiency: uses LIBSVM that is an efficient implementation of SVM for multi-class classifications, including also various interfaces with java.
