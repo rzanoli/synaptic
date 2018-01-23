@@ -261,6 +261,9 @@ public class LearnAndClassifyTest {
 
 ## Authors
 
+- Claudio Giuliano
+- Roberto Zanoli
+
 ## License
 
 This project is licensed under the Apache License v2.0.
